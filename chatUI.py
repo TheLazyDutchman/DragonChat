@@ -1,0 +1,93 @@
+import tkinter as tk
+import tkinter.ttk as ttk
+import time
+from window import ScrollableFrame
+
+class chatTextWindow(ScrollableFrame):
+
+    def __init__(self, main, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.main = main
+
+        self.grid(row=0, column=0)
+
+    def displayMessage(self, message):
+        self.bindObj(ttk.Label(self.scrollable_frame, text=message[0] + " : " + message[1]))
+        time.sleep(0.01)
+        self.canvas.yview_moveto(1)
+
+class chatInputWindow(ttk.Frame):
+
+    def __init__(self, main, parent, callBack, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.main = main
+
+        self.grid(row=1, column=0)
+        self.callBack = callBack
+
+        self.textVar = tk.StringVar(self)
+        def textChange(a, b, c):
+            data = self.textVar.get()
+            if len(data) > 0:
+                if data[0] == "!":
+                    data = data[1:]
+
+                    options = self.main.getCommandOptions(data)
+                    self.set_options(options)
+
+
+
+        self.textVar.trace('w', textChange)
+
+        self.input = ttk.Entry(self, textvariable=self.textVar)
+        self.input.grid(row=0, column=0)
+
+        self.submit = ttk.Button(self, text="send", command=self.send_text)
+        self.submit.grid(row=0, column=1)
+
+    def send_text(self):
+        text = self.input.get()
+        if not len(text) == 0:
+            if not text[0] == "!":
+                self.callBack(("msg", self.main.name, text))
+            else:
+                self.main.testStringWithCommands(text[1:])
+            
+            self.input.delete(0, len(text))
+
+    def set_options(self, options):
+        # options are stored in key value pairs, like (key, value)
+        var = tk.StringVar()
+        self.optnListBox = ttk.OptionMenu(self, var, "Select", *[opt[0] for opt in options])
+        self.optnListBox.grid(row=1, column=0)
+
+        def select(a, b, c):
+            name = var.get()
+            selection = [opt for opt in options if opt[0] == name][0]
+
+            self.input.delete(0, len(self.input.get()))
+            self.input.insert(tk.END, selection[1])
+
+            self.optnListBox.after(15, func=self.optnListBox.destroy)
+
+            if selection[2]:
+                self.submit.invoke()
+
+        var.trace("w", select)
+
+class chatWindow(ttk.Frame):
+
+    def __init__(self, main, parent, textCallBack, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.main = main
+
+        self.text = chatTextWindow(self.main, self)
+        self.input = chatInputWindow(self.main, self, textCallBack)
+
+        self.grid(row=0, column=0, )
+
+    def handleMsg(self, msg):
+        if msg[0] == "msg":
+            self.text.displayMessage(msg[1:])
+        if msg[0] == "initiative":
+            self.main.appendInitiativeChanges(msg[1], msg[2])
