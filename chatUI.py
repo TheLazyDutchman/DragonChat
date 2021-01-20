@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import time
-from window import ScrollableFrame
+from ScrollableFrame import ScrollableFrame
 
 class chatTextWindow(ScrollableFrame):
 
@@ -56,24 +56,16 @@ class chatInputWindow(ttk.Frame):
             self.input.delete(0, len(text))
 
     def set_options(self, options):
-        # options are stored in key value pairs, like (key, value)
-        var = tk.StringVar()
-        self.optnListBox = ttk.OptionMenu(self, var, "Select", *[opt[0] for opt in options])
+        optionsVar = tk.StringVar(value=[x[0] for x in options])
+        self.optnListBox = tk.Listbox(self, height = 6, listvariable = optionsVar)
         self.optnListBox.grid(row=1, column=0)
 
-        def select(a, b, c):
-            name = var.get()
-            selection = [opt for opt in options if opt[0] == name][0]
+        def select(event):
+            selected = options[self.optnListBox.curselection()[0]]
+            parameters = self.textVar.get().split(" ")[1:]
+            selected[1].callCommand(parameters)
 
-            self.input.delete(0, len(self.input.get()))
-            self.input.insert(tk.END, selection[1])
-
-            self.optnListBox.after(15, func=self.optnListBox.destroy)
-
-            if selection[2]:
-                self.submit.invoke()
-
-        var.trace("w", select)
+        self.optnListBox.bind('<<ListboxSelect>>', select)
 
 class chatWindow(ttk.Frame):
 

@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from API import dndApi
-from window import ScrollableFrame
+import dndApi
+from ScrollableFrame import ScrollableFrame
 
 class rulesWindow(ttk.Frame):
     
