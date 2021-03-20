@@ -48,10 +48,12 @@ class ScrollableFrame(ttk.Frame):
 
         self.objAmount = 0
 
-    def bindObj(self, obj):
-        obj.grid(row=self.objAmount, column = 0, sticky="NW")
+    def bindObj(self, obj, indentLevel = 0):
+        obj.grid(row=self.objAmount, column = 0, columnspan = 8, sticky="NW")
         self.objAmount += 1
 
         obj.bind("<MouseWheel>", self.mouse_wheel) # Windows mouse wheel event
         obj.bind("<Button-4>", self.mouse_wheel) # Linux mouse wheel event (Up)
         obj.bind("<Button-5>", self.mouse_wheel) # Linux mouse wheel event (Down)
+
+        return obj

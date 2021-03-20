@@ -51,19 +51,20 @@ class chatInputWindow(ttk.Frame):
             if not text[0] == "!":
                 self.callBack(("msg", self.main.name, text))
             else:
-                self.main.testStringWithCommands(text[1:])
+                self.selectedCommand[1].callCommand(self.parameters)
             
             self.input.delete(0, len(text))
 
     def set_options(self, options):
         optionsVar = tk.StringVar(value=[x[0] for x in options])
+        self.selectedCommand = options[0]
         self.optnListBox = tk.Listbox(self, height = 6, listvariable = optionsVar)
         self.optnListBox.grid(row=1, column=0)
+        self.parameters = self.textVar.get().split(" ")[1:]
 
         def select(event):
-            selected = options[self.optnListBox.curselection()[0]]
-            parameters = self.textVar.get().split(" ")[1:]
-            selected[1].callCommand(parameters)
+            self.selectedCommand = options[self.optnListBox.curselection()[0]]
+            self.selectedCommand[1].callCommand(self.parameters)
 
         self.optnListBox.bind('<<ListboxSelect>>', select)
 

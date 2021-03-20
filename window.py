@@ -101,6 +101,8 @@ class main(tk.Tk):
         self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, textCallBack)
 
+        self.addChatCommand("rule", self.text.rules.displayRule)
+
 
     def start(self):
         self.mainloop()
@@ -118,9 +120,9 @@ class main(tk.Tk):
     def addChatCommand(self, name, callBack):
         self.text.addChatCommand(name, callBack)
 
-    def testStringWithCommands(self, string):
-        for cmdGroup in self.text.commands:
-            cmdGroup.checkString(string)
+    # def testStringWithCommands(self, string):
+    #     for cmdGroup in self.text.commands:
+    #         cmdGroup.checkString(string)
 
     def getCommandOptions(self, data):
         options = list()

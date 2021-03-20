@@ -23,5 +23,4 @@ with ClientConnection.Connections(socket.gethostname(), serverIp) as server:
     server.start_textLoop(textSendPort, textRecvPort, main.handleMsg)
     # server.start_soundLoop(soundSendPort, soundRecvPort)
 
-
     main.start()
