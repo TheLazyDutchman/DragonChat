@@ -13,34 +13,34 @@ def getInfo(request):
     else:
         return None
 
-def findOptions(obj):
-    options = list()
-    if type(obj) is list:
-        for item in obj:
-            options.extend(findOptions(item))
+# def findOptions(obj):
+#     options = list()
+#     if type(obj) is list:
+#         for item in obj:
+#             options.extend(findOptions(item))
 
-    if type(obj) is dict:
-        hasUrl = False
+#     if type(obj) is dict:
+#         hasUrl = False
 
-        if 'url' in obj:
-            value = "!rule check " + obj['url'][5:]
+#         if 'url' in obj:
+#             value = "!rule check " + obj['url'][5:]
 
-            name = obj['index']
+#             name = obj['index']
 
-            if 'name' in obj:
-                name = obj['name']
-            elif 'class' in obj:
-                name = obj['class']
+#             if 'name' in obj:
+#                 name = obj['name']
+#             elif 'class' in obj:
+#                 name = obj['class']
 
-            if type(name) is str:
-                options.append((name, value))
+#             if type(name) is str:
+#                 options.append((name, value))
                 
-            hasUrl = True
+#             hasUrl = True
 
-        for key, value in obj.items():
-            if not hasUrl:
-                if type(value) is str and '/' in value:
-                    url = "!rule check " + value[5:]
-                    options.append((key, url))
+#         for key, value in obj.items():
+#             if not hasUrl:
+#                 if type(value) is str and '/' in value:
+#                     url = "!rule check " + value[5:]
+#                     options.append((key, url))
 
-    return options
+#     return options
