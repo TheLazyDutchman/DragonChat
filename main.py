@@ -1,12 +1,10 @@
 import ClientConnection
 from imutils.video import VideoStream
-import time
 import socket
 import window
 
 
 serverIp = "212.187.9.198"
-serverIp = "127.0.0.1"
 imgSendPort = 5555
 imgRecvPort = 5556
 textSendPort = 5557
