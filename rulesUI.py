@@ -17,13 +17,16 @@ class rulesWindow(ttk.Frame):
         self.text = ScrollableFrame(self)
         self.text.pack()
 
-    def displayRule(self, rule):
+    def displayRule(self, rule, isSearch=True):
         if type(rule) == list:
             rule = " ".join(rule)
 
         self.text.clearFrame()
 
-        data = dndApi.getInfo(rule)
+        if isSearch:
+            data = dndApi.searchInfo(rule)
+        else:
+            data = dndApi.getInfo(rule)
 
         if not data == None:
             if "results" in data:
@@ -47,7 +50,7 @@ class rulesWindow(ttk.Frame):
                 label = ttk.Label(self.text.scrollable_frame, text = str(obj), wraplength = self.text.canvas.winfo_width())
 
             else:
-                label = ttk.Button(self.text.scrollable_frame, text = str(obj), command=lambda : self.displayRule(url))
+                label = ttk.Button(self.text.scrollable_frame, text = str(obj), command=lambda : self.displayRule(url, False))
             self.text.bindObj(label, indentLevel)
 
             return label
