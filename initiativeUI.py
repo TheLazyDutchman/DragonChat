@@ -8,15 +8,59 @@ class initiativeWindow(ttk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.main = main
 
-        self.grid(row=0, column=1, rowspan=2)
         self.initiative = list()
+        self.listFrame = ttk.Frame(self)
 
         self.started = False
+
+        self.addCreaturesFrame = self.showAddCreaturesUI()
+
+        self.grid(row=0, column=1, rowspan=2)
+
+    def showAddCreaturesUI(self):
+        frame = ttk.Frame(self)
+
+        ttk.Label(frame, text="name").pack()
+        creatureName = tk.StringVar()
+        ttk.Entry(frame, textvariable=creatureName).pack()
+
+        ttk.Label(frame, text="modifier").pack()
+        dexModifier = tk.IntVar()
+        ttk.Entry(frame, textvariable=dexModifier).pack()
+
+        ttk.Label(frame, text="number").pack()
+        numCreatures = tk.IntVar()
+        ttk.Entry(frame, textvariable=numCreatures).pack()
+
+        ttk.Button(frame, text="add creatures", command=lambda : 
+            self.AddCreatures(creatureName.get(), numCreatures.get(), dexModifier.get())).pack()
+
+        ttk.Button(frame, text="start initiative", command=self.start).pack()
+
+        frame.grid(column=1, row=0)
+        return frame
+
+    def showInInitiativeUI(self):
+        frame = ttk.Frame(self)
+
+        ttk.Button(frame, text="next turn", command=self.nextTurn).pack()
+        ttk.Button(frame, text="end initiative", command=self.end).pack()
+
+        frame.grid(column=1, row=0)
+        return frame
 
     def start(self):
         self.curCreature = self.initiative[0]
         self.started = True
+        self.addCreaturesFrame.grid_remove()
+        self.addCreaturesFrame = self.showInInitiativeUI()
         self.sendChanges()
+
+    def end(self):
+        self.initiative = list()
+        self.started = False
+        self.addCreaturesFrame.grid_remove()
+        self.addCreaturesFrame = self.showAddCreaturesUI()
 
     def hasCreatures(self):
         return len(self.initiative) > 0
@@ -24,8 +68,7 @@ class initiativeWindow(ttk.Frame):
     def AddCreature(self, name, initiative):
         self.initiative.append((name, int(initiative)))
         self.initiative.sort(key=lambda x: x[1], reverse=True)
-        if not self.started:
-            self.start()
+        self.curCreature = self.initiative[0]
         self.sendChanges()
 
     def AddCreatures(self, name, amount, bonus):
@@ -49,12 +92,16 @@ class initiativeWindow(ttk.Frame):
         self.sendChanges()
 
     def displayInitiative(self):
+        self.listFrame.grid_remove()
+        self.listFrame = ttk.Frame(self)
         index = self.initiative.index(self.curCreature)
         initiative = self.initiative[index:]
         initiative.extend(self.initiative[:index])
         for i in range(len(initiative)):
-            label = ttk.Label(self, text=initiative[i][0] + " : " + str(initiative[i][1]))
+            label = ttk.Label(self.listFrame, text=initiative[i][0] + " : " + str(initiative[i][1]))
             label.grid(row=i, column=0)
+
+        self.listFrame.grid(column=0, row=0)
     
     def nextTurn(self):
         index = self.initiative.index(self.curCreature)
