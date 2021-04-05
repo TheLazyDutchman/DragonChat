@@ -13,6 +13,17 @@ def getInfo(request):
     else:
         return None
 
+def searchInfo(request):
+    url_parts = request.split(" ")
+    sub_url = "/".join(url_parts[:-1]) + "?name=" + url_parts[-1]
+    url = base_url + sub_url
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        return json.loads(response.content.decode('utf-8'))
+    else:
+        return None
+
 # def findOptions(obj):
 #     options = list()
 #     if type(obj) is list:
