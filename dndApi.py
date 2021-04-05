@@ -14,6 +14,7 @@ def getInfo(request):
         return None
 
 def searchInfo(request):
+    print("hello")
     url_parts = request.split(" ")
     sub_url = "/".join(url_parts[:-1]) + "?name=" + url_parts[-1]
     url = base_url + sub_url
