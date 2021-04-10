@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from APIclasses.data import armorclass, price
+from APIclasses.data import armorclass, category_range, damage, price, fighting_range, weapon_properties, weapon_range, speed
 
 @dataclass
 class item:
@@ -29,3 +29,32 @@ class armor(item):
     armor_class: armorclass
     str_minimum: int
     stealth_disadvantage: bool
+
+
+@dataclass
+class tool(item):
+    tool_category: str
+
+
+@dataclass
+class vehicle(item):
+    vehicle_category: str
+
+@dataclass
+class mount(vehicle):
+    speed: speed
+    capacity: int
+
+@dataclass
+class ship(vehicle):
+    speed: speed
+
+
+@dataclass
+class weapon(item):
+    weapon_category: str
+    weapon_range: weapon_range
+    category_range: category_range
+    damage: damage
+    range: fighting_range
+    properties: list[weapon_properties]
