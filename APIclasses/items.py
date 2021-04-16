@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from APIclasses.data import armorclass, category_range, damage, price, fighting_range, weapon_properties, weapon_range, speed
+from APIclasses.itemData import armorclass, category_range, damage, price, fighting_range, weapon_properties, weapon_range, speed
 
 @dataclass
 class item:

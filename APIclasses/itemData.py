@@ -1,4 +1,4 @@
-from dataclasses import InitVar, dataclass
+from dataclasses import dataclass
 from enum import Enum
 
 class currency(Enum):
@@ -62,3 +62,13 @@ class weapon_properties:
 class speed:
     quantity: int
     unit: str
+
+@dataclass
+class condition:
+    name: str
+    desc: str
+
+@dataclass
+class magic_school:
+    name: str
+    desc: str

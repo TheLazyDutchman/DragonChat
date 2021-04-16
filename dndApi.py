@@ -1,11 +1,18 @@
 import json
 import requests
 
+from APIclasses.creatureData import abilities
+
 base_url = "https://www.dnd5eapi.co/api/"
 
 def getInfo(request):
     sub_url = "/".join(request.split(" "))
+    if sub_url.startswith('/api/'):
+        sub_url = sub_url[5:]
+
     url = base_url + sub_url
+
+    print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -24,34 +31,21 @@ def searchInfo(request):
     else:
         return None
 
-# def findOptions(obj):
-#     options = list()
-#     if type(obj) is list:
-#         for item in obj:
-#             options.extend(findOptions(item))
 
-#     if type(obj) is dict:
-#         hasUrl = False
+def getMonster(url):
+    monster = getInfo(url)
+    if monster == None:
+        print('returned nothing')
+        return
 
-#         if 'url' in obj:
-#             value = "!rule check " + obj['url'][5:]
+    ability_scores = abilities(
+        monster['strength'],
+        monster['dexterity'],
+        monster['constitution'],
+        monster['intelligence'],
+        monster['wisdom'],
+        monster['charisma'])
 
-#             name = obj['index']
+    print(ability_scores)
 
-#             if 'name' in obj:
-#                 name = obj['name']
-#             elif 'class' in obj:
-#                 name = obj['class']
-
-#             if type(name) is str:
-#                 options.append((name, value))
-                
-#             hasUrl = True
-
-#         for key, value in obj.items():
-#             if not hasUrl:
-#                 if type(value) is str and '/' in value:
-#                     url = "!rule check " + value[5:]
-#                     options.append((key, url))
-
-#     return options
+getMonster('monsters/bandit')
