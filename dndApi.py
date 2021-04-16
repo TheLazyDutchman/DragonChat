@@ -1,7 +1,8 @@
 import json
 import requests
 
-from APIclasses.creatureData import abilities
+from APIclasses.creatures import monster
+from APIclasses.creatureData import abilities, getAlignment, getSenses, getSize, getSpeed
 
 base_url = "https://www.dnd5eapi.co/api/"
 
@@ -31,21 +32,53 @@ def searchInfo(request):
     else:
         return None
 
+def searchMonster(name):
+    return searchInfo(f'monsters {name}')
 
 def getMonster(url):
-    monster = getInfo(url)
-    if monster == None:
+    monster_data = getInfo(url)
+    if monster_data == None:
         print('returned nothing')
         return
 
+
+    size = getSize(monster_data['size'])
+    alignment = getAlignment(monster_data['alignment'])
+    speed = getSpeed(monster_data['speed'])
+    senses = getSenses(monster_data['senses'])
+
     ability_scores = abilities(
-        monster['strength'],
-        monster['dexterity'],
-        monster['constitution'],
-        monster['intelligence'],
-        monster['wisdom'],
-        monster['charisma'])
+        monster_data['strength'],
+        monster_data['dexterity'],
+        monster_data['constitution'],
+        monster_data['intelligence'],
+        monster_data['wisdom'],
+        monster_data['charisma']
+    )
 
-    print(ability_scores)
+    return monster(
+        monster_data['name'],
+        size,
+        alignment,
+        monster_data['armor_class'],
+        monster_data['hit_points'],
+        monster_data['hit_points'],
+        monster_data['hit_dice'],
+        speed,
+        ability_scores,
+        list(),
+        list(),
+        list(),
+        list(),
+        list(),
+        senses,
+        list(),
+        list(),
+        list(),
+        monster_data['type'],
+        monster_data['subtype'],
+        monster_data['challenge_rating'],
+        monster_data['xp']
+    )
 
-getMonster('monsters/bandit')
+print(getMonster('monsters/bandit'))
