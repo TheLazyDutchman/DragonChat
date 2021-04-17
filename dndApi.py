@@ -1,11 +1,19 @@
 import json
 import requests
 
+from APIclasses.creatures import monster
+from APIclasses.creatureData import abilities, getAlignment, getSenses, getSize, getSpeed
+
 base_url = "https://www.dnd5eapi.co/api/"
 
 def getInfo(request):
     sub_url = "/".join(request.split(" "))
+    if sub_url.startswith('/api/'):
+        sub_url = sub_url[5:]
+
     url = base_url + sub_url
+
+    print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -14,7 +22,6 @@ def getInfo(request):
         return None
 
 def searchInfo(request):
-    print("hello")
     url_parts = request.split(" ")
     sub_url = "/".join(url_parts[:-1]) + "?name=" + url_parts[-1]
     url = base_url + sub_url
@@ -25,34 +32,51 @@ def searchInfo(request):
     else:
         return None
 
-# def findOptions(obj):
-#     options = list()
-#     if type(obj) is list:
-#         for item in obj:
-#             options.extend(findOptions(item))
+def searchMonster(name):
+    return searchInfo(f'monsters {name}')
 
-#     if type(obj) is dict:
-#         hasUrl = False
+def getMonster(url):
+    monster_data = getInfo(url)
+    if monster_data == None:
+        print('returned nothing')
+        return
 
-#         if 'url' in obj:
-#             value = "!rule check " + obj['url'][5:]
 
-#             name = obj['index']
+    size = getSize(monster_data['size'])
+    alignment = getAlignment(monster_data['alignment'])
+    speed = getSpeed(monster_data['speed'])
+    senses = getSenses(monster_data['senses'])
 
-#             if 'name' in obj:
-#                 name = obj['name']
-#             elif 'class' in obj:
-#                 name = obj['class']
+    ability_scores = abilities(
+        monster_data['strength'],
+        monster_data['dexterity'],
+        monster_data['constitution'],
+        monster_data['intelligence'],
+        monster_data['wisdom'],
+        monster_data['charisma']
+    )
 
-#             if type(name) is str:
-#                 options.append((name, value))
-                
-#             hasUrl = True
-
-#         for key, value in obj.items():
-#             if not hasUrl:
-#                 if type(value) is str and '/' in value:
-#                     url = "!rule check " + value[5:]
-#                     options.append((key, url))
-
-#     return options
+    return monster(
+        monster_data['name'],
+        size,
+        alignment,
+        monster_data['armor_class'],
+        monster_data['hit_points'],
+        monster_data['hit_points'],
+        monster_data['hit_dice'],
+        speed,
+        ability_scores,
+        list(),
+        list(),
+        list(),
+        list(),
+        list(),
+        senses,
+        list(),
+        list(),
+        list(),
+        monster_data['type'],
+        monster_data['subtype'],
+        monster_data['challenge_rating'],
+        monster_data['xp']
+    )

@@ -45,7 +45,6 @@ class rulesWindow(ttk.Frame):
 
 
     def displayObject(self, obj, indentLevel = 0, url = None):
-        print("hello")
         if type(obj) in (str, int, float):
             if url == None:
                 label = ttk.Label(self.text.scrollable_frame, text = str(obj), wraplength = self.text.canvas.winfo_width())
