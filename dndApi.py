@@ -80,5 +80,3 @@ def getMonster(url):
         monster_data['challenge_rating'],
         monster_data['xp']
     )
-
-print(getMonster('monsters/bandit'))
