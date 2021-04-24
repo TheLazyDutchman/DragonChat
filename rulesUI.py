@@ -5,90 +5,62 @@ import dndApi
 from ScrollableFrame import ScrollableFrame
 
 class rulesWindow(ttk.Frame):
-    
-    def __init__(self, main, parent, *args, **kwargs):
+
+    def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.main = main
         self.grid(row=1, column=0)
 
         self.title = ttk.Label(self, text="rules")
-        self.title.pack()
+        self.title.grid(column=0, row=0)
 
         self.text = ScrollableFrame(self)
-        self.text.pack()
+        self.text.grid(column=0, row=1)
 
-    def displayRule(self, rule, isSearch=True):
-        if type(rule) == list:
-            rule = " ".join(rule)
+        self.searchVar = tk.StringVar()
+        self.searchBox = ttk.Entry(self, textvariable=self.searchVar)
+        self.searchBox.grid(column=1, row=0)
 
+        self.searchVar.trace('w', lambda *args: self.showOptions(self.searchVar.get()))
+
+        self.searchOptionsBox = ScrollableFrame(self, width=100)
+        self.options = []
+        self.options.append(('Monsters', dndApi.searchMonster('')['results']))
+        self.options.append(('Items', dndApi.searchItem('')['results']))
+
+        self.searchOptionsBox.grid(column=1, row=1)
+        self.showOptions('')
+
+    def showOptions(self, name: str):
+        self.searchOptionsBox.clearFrame()
+        name = name.lower()
+
+        for optionList in self.options:
+            ttk.Label(self.searchOptionsBox.scrollable_frame, text=optionList[0]).pack()
+            for option in optionList[1]:
+                if name in option['name'].lower():
+                    button = ttk.Button(
+                        self.searchOptionsBox.scrollable_frame, 
+                        text=option['name'], 
+                        command=lambda type=optionList[0], url=option['url']:self.showRule(type, url)
+                    )
+                    button.pack()
+                    self.searchOptionsBox.bind(button) # make scrolling work with mouse over the button
+
+    def showRule(self, type, url):
         self.text.clearFrame()
+        
+        if type == 'Monsters':
+            monster = dndApi.getMonster(url)
+            if monster == None:
+                return
+            frame = monster.show(self.text.scrollable_frame)
+            frame.pack()
+            self.text.bind(frame)
 
-        if isSearch:
-            data = dndApi.searchInfo(rule)
-        else:
-            data = dndApi.getInfo(rule)
-
-        if not data == None:
-            if "results" in data:
-                data = data["results"]
-
-            # options = dndApi.findOptions(data)
-
-            self.displayObject(data)            
-
-            # # this would be a reference back to the same page and can be removed
-            # if type(data) is dict:
-            #     options.pop(0)
-
-            # if len(options) > 0:
-            #     self.main.set_chatOptions(options)
-
-
-    def displayObject(self, obj, indentLevel = 0, url = None):
-        if type(obj) in (str, int, float):
-            if url == None:
-                label = ttk.Label(self.text.scrollable_frame, text = str(obj), wraplength = self.text.canvas.winfo_width())
-
-            else:
-                label = ttk.Button(self.text.scrollable_frame, text = str(obj), command=lambda : self.displayRule(url, False))
-            self.text.bindObj(label, indentLevel)
-
-            return label
-
-        if type(obj) == list:
-            for data in obj:
-                self.displayObject(data, indentLevel = indentLevel)
-
-        if type(obj) == dict:
-            toBeDisplayed = list()
-            for key, value in obj.items():
-                if type(value) == str:
-                    if value.startswith("/api/"):
-                        if key == "url":
-                            toBeDisplayed = toBeDisplayed[3:]
-                            toBeDisplayed[0] = [(toBeDisplayed[0][0], value[5:]), toBeDisplayed[0][1]]
-
-                        else:
-                            toBeDisplayed.append([(key, value[5:]), indentLevel])
-
-                        continue
-                
-                if key == "choose":
-                    toBeDisplayed.append([f"{key} {value} from:", indentLevel])
-                    toBeDisplayed.append([obj["from"], indentLevel + 1])
-                    break
-
-                if key == "equipment":
-                    toBeDisplayed.append([value, indentLevel])
-                    toBeDisplayed.append([f"quantity {obj['quantity']}", indentLevel])
-                    break
-
-                toBeDisplayed.append([key + ":", indentLevel])
-                toBeDisplayed.append([value, indentLevel + 1])
-
-            for o in toBeDisplayed:
-                if type(o[0]) == tuple:
-                    self.displayObject(o[0][0], indentLevel=o[1], url = o[0][1])
-
-                self.displayObject(o[0], indentLevel=o[1])
-
+        if type == 'Items':
+            item = dndApi.getItem(url)
+            if item == None:
+                return
+            frame = item.show(self.text.scrollable_frame)
+            frame.pack()
+            self.text.bind(frame)

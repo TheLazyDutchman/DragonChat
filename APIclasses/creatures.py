@@ -55,23 +55,23 @@ class creature:
         ttk.Label(frame, text=f"HP: {self.hp}").pack()
         ttk.Label(frame, text=f"Hit Dice: {self.hit_dice}").pack()
         self.showSpeed(frame)
-        ttk.Label(frame, text=f"STR: {self.abilities.strength} - {self.getSTRbonus()}").pack()
-        ttk.Label(frame, text=f"DEX: {self.abilities.dexterity} - {self.getDEXbonus()}").pack()
-        ttk.Label(frame, text=f"CON: {self.abilities.constitution} - {self.getCONbonus()}").pack()
-        ttk.Label(frame, text=f"INT: {self.abilities.intelligence} - {self.getINTbonus()}").pack()
-        ttk.Label(frame, text=f"WIS: {self.abilities.wisdom} - {self.getWISbonus()}").pack()
-        ttk.Label(frame, text=f"CHA: {self.abilities.charisma} - {self.getCHAbonus()}").pack()
+        ttk.Label(frame, text=f"STR: {self.getSTRbonus()} ({self.abilities.strength})").pack()
+        ttk.Label(frame, text=f"DEX: {self.getDEXbonus()} ({self.abilities.dexterity})").pack()
+        ttk.Label(frame, text=f"CON: {self.getCONbonus()} ({self.abilities.constitution})").pack()
+        ttk.Label(frame, text=f"INT: {self.getINTbonus()} ({self.abilities.intelligence})").pack()
+        ttk.Label(frame, text=f"WIS: {self.getWISbonus()} ({self.abilities.wisdom})").pack()
+        ttk.Label(frame, text=f"CHA: {self.getCHAbonus()} ({self.abilities.charisma})").pack()
 
         return frame
 
     def showSpeed(self, window):
         for s in self.speed:
             if isinstance(s, walk):
-                ttk.Label(window, text=f"walk speed: {s.value}")
+                ttk.Label(window, text=f"walk speed: {s.value}").pack()
 
 @dataclass
 class monster(creature):
-    type: str
+    monster_type: str
     subtype: str
     cr: float
     xp: int

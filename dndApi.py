@@ -1,3 +1,5 @@
+from APIclasses.items import item
+from APIclasses.itemData import getCurrency, price
 import json
 import requests
 
@@ -79,4 +81,29 @@ def getMonster(url):
         monster_data['subtype'],
         monster_data['challenge_rating'],
         monster_data['xp']
+    )
+
+def searchItem(name):
+    return searchInfo(f'equipment {name}')
+
+def getItem(url):
+    item_data = getInfo(url)
+
+    cost = price(
+        item_data['cost']['quantity'], 
+        getCurrency(item_data['cost']['unit'])
+    )
+
+    description = ''
+    if "desc" in item_data:
+        description = item_data['desc']
+        if isinstance(description, list):
+            description = '\n'.join(description)
+
+    return item(
+        item_data['name'],
+        item_data['equipment_category']['name'],
+        cost,
+        item_data['weight'],
+        description
     )

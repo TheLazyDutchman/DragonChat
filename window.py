@@ -82,7 +82,7 @@ class textWindow(ttk.Frame):
         self.grid(row=0, column=1)
 
         self.chat = chatWindow(self.main, self, chatSendCallback)
-        self.rules = rulesWindow(self.main, self)
+        self.rules = rulesWindow(self)
         self.initiative = initiativeWindow(self.main, self)
 
     def addChatCommand(self, name, callBack):
@@ -101,7 +101,7 @@ class main(tk.Tk):
         self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, textCallBack)
 
-        self.addChatCommand("rule", self.text.rules.displayRule)
+        # self.addChatCommand("rule", self.text.rules.displayRule)
 
 
     def start(self):

@@ -8,6 +8,10 @@ class currency(Enum):
     gold = 3
     platinum = 4
 
+def getCurrency(string):
+    print(string)
+    return currency.gold
+
 class damage_type(Enum):
     acid = 0
     bludgeoning = 1

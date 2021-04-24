@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from APIclasses.itemData import armorclass, category_range, damage, price, fighting_range, weapon_properties, weapon_range, speed
+import tkinter as tk
+import tkinter.ttk as ttk
 
 @dataclass
 class item:
@@ -8,6 +10,24 @@ class item:
     cost: price
     weight: int
     description: str
+
+    def show(self, window):
+        frame = ttk.Frame(window)
+
+        ttk.Label(frame, text=f"Name: {self.name}").pack()
+        ttk.Label(frame, text=f"Category: {self.equipment_category}").pack()
+        self.showCost(frame)
+        ttk.Label(frame, text=f"Weight: {self.weight}").pack()
+        ttk.Label(frame, text="Description").pack()
+        description = tk.Text(frame)
+        description.insert(0.0, self.description)
+        description.configure(state='disabled')
+        description.pack()
+
+        return frame
+
+    def showCost(self, window):
+        ttk.Label(window, text=f"Cost: {self.cost.quantity} {self.cost.unit}").pack()
 
 
 @dataclass
