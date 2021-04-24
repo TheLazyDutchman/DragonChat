@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import random
+from dndApi import searchMonster, getMonster
 
 class initiativeWindow(ttk.Frame):
 
@@ -13,7 +14,7 @@ class initiativeWindow(ttk.Frame):
 
         self.started = False
 
-        self.addCreaturesFrame = self.showAddCreaturesUI()
+        self.addCreaturesFrame = self.showAddMonstersUI()
 
         self.grid(row=0, column=1, rowspan=2)
 
@@ -40,6 +41,45 @@ class initiativeWindow(ttk.Frame):
         frame.grid(column=1, row=0)
         return frame
 
+    def showAddMonstersUI(self):
+        monsters = searchMonster('')['results']
+        monsters = [(x['name'], x['url']) for x in monsters]
+        frame = ttk.Frame(self)
+
+        ttk.Label(frame, text="name").pack()
+        name = tk.StringVar()
+        ttk.Entry(frame, textvariable=name).pack()
+        monsterName = tk.StringVar()
+
+        monsterOptions = ttk.Combobox(frame, textvariable=monsterName)
+        monsterOptions.pack()
+
+        values = list()
+
+        ttk.Label(frame, text="number").pack()
+        numCreatures = tk.IntVar()
+        ttk.Entry(frame, textvariable=numCreatures).pack()
+
+        ttk.Button(frame, text="add creatures", command=lambda : 
+            self.AddMonsters(values[monsterOptions.current()][1], numCreatures.get())).pack()
+
+        ttk.Button(frame, text="start initiative", command=self.start).pack()
+
+
+        def showMonsterOptions(*args):
+            data = name.get().lower()
+            values.clear()
+            values.extend([(x[0], x[1]) for x in monsters if data in x[0].lower()])
+            monsterOptions['values'] = [x[0] for x in values]
+            monsterOptions.current(0)
+
+        showMonsterOptions() # show all monsters on default
+
+        name.trace('w', showMonsterOptions)
+
+        frame.grid(column=1, row=0)
+        return frame
+
     def showInInitiativeUI(self):
         frame = ttk.Frame(self)
 
@@ -60,7 +100,7 @@ class initiativeWindow(ttk.Frame):
         self.initiative = list()
         self.started = False
         self.addCreaturesFrame.grid_remove()
-        self.addCreaturesFrame = self.showAddCreaturesUI()
+        self.addCreaturesFrame = self.showAddMonstersUI()
 
     def hasCreatures(self):
         return len(self.initiative) > 0
@@ -75,6 +115,12 @@ class initiativeWindow(ttk.Frame):
         for i in range(int(amount)):
             num = random.randint(1, 20) + int(bonus)
             self.AddCreature(name + str(i), num)
+
+    def AddMonsters(self, name, amount):
+        monster = getMonster(name)
+        for i in range(int(amount)):
+            num = random.randint(1, 20) + int(monster.getDEXbonus())
+            self.AddCreature(monster.name + str(i), num)
 
     def RemoveCreature(self, name):
         creature = None
