@@ -4,7 +4,7 @@ import json
 import requests
 
 from APIclasses.creatures import monster
-from APIclasses.creatureData import abilities, getAlignment, getSenses, getSize, getSpeed
+from APIclasses.creatureData import abilities, getSenses, getSpeed
 
 base_url = "https://www.dnd5eapi.co/api/"
 
@@ -14,8 +14,6 @@ def getInfo(request):
         sub_url = sub_url[5:]
 
     url = base_url + sub_url
-
-    print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -43,9 +41,6 @@ def getMonster(url):
         print('returned nothing')
         return
 
-
-    size = getSize(monster_data['size'])
-    alignment = getAlignment(monster_data['alignment'])
     speed = getSpeed(monster_data['speed'])
     senses = getSenses(monster_data['senses'])
 
@@ -60,8 +55,8 @@ def getMonster(url):
 
     return monster(
         monster_data['name'],
-        size,
-        alignment,
+        monster_data['size'],
+        monster_data['alignment'],
         monster_data['armor_class'],
         monster_data['hit_points'],
         monster_data['hit_points'],

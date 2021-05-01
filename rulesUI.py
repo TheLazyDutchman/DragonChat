@@ -22,7 +22,7 @@ class rulesWindow(ttk.Frame):
 
         self.searchVar.trace('w', lambda *args: self.showOptions(self.searchVar.get()))
 
-        self.searchOptionsBox = ScrollableFrame(self, width=100)
+        self.searchOptionsBox = ScrollableFrame(self, width=160)
         self.options = []
         self.options.append(('Monsters', dndApi.searchMonster('')['results']))
         self.options.append(('Items', dndApi.searchItem('')['results']))

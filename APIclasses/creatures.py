@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from APIclasses.creatureData import size, alignment, speed, walk, abilities, sense, action
+from APIclasses.creatureData import climb, fly, speed, swim, walk, abilities, sense, action
 import math
 import tkinter.ttk as ttk
 
 @dataclass
 class creature:
     name: str
-    size: size
-    alignment: alignment
+    size: str
+    alignment: str
     base_ac: int
     base_hp: int
     hp: int
@@ -68,6 +68,12 @@ class creature:
         for s in self.speed:
             if isinstance(s, walk):
                 ttk.Label(window, text=f"walk speed: {s.value}").pack()
+            if isinstance(s, swim):
+                ttk.Label(window, text=f"swim speed: {s.value}").pack()
+            if isinstance(s, climb):
+                ttk.Label(window, text=f"climb speed: {s.value}").pack()
+            if isinstance(s, fly):
+                ttk.Label(window, text=f"fly speed: {s.value}").pack()
 
 @dataclass
 class monster(creature):
@@ -75,3 +81,13 @@ class monster(creature):
     subtype: str
     cr: float
     xp: int
+
+    def show(self, window):
+        frame = super().show(window)
+
+        ttk.Label(frame, text=f"monster type: {self.monster_type}").pack()
+        ttk.Label(frame, text=f"subtype: {self.subtype}").pack()
+        ttk.Label(frame, text=f"challenge rating: {self.cr}").pack()
+        ttk.Label(frame, text=f"xp: {self.xp}").pack()
+
+        return frame

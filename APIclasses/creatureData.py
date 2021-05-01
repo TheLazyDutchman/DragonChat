@@ -1,28 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
-
-class size(Enum):
-    Small = 0
-    Medium = 1
-
-def getSize(string):
-    print(string)
-    return size.Medium
-
-class alignment(Enum):
-    LG = 0
-    NG = 1
-    CG = 2
-    LN = 3
-    TN = 4
-    CN = 5
-    LE = 6
-    NE = 7
-    CE = 8
-
-def getAlignment(string):
-    print(string)
-    return alignment.TN
 
 @dataclass
 class speed:
@@ -31,11 +7,26 @@ class speed:
 @dataclass
 class walk(speed):
     value: int
+@dataclass
+class swim(speed):
+    value: int
+@dataclass
+class fly(speed):
+    value: int
+@dataclass
+class climb(speed):
+    value: int
 
 def getSpeed(data):
     speeds = list()
     if 'walk' in data:
         speeds.append(walk(int(data['walk'][:-4])))
+    if 'swim' in data:
+        speeds.append(swim(int(data['swim'][:-4])))
+    if 'fly' in data:
+        speeds.append(fly(int(data['fly'][:-4])))
+    if 'climb' in data:
+        speeds.append(climb(int(data['climb'][:-4])))
 
     return speeds
 
