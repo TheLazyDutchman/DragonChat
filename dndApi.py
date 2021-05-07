@@ -3,8 +3,7 @@ from APIclasses.itemData import getCurrency, price
 import json
 import requests
 
-from APIclasses.creatures import monster
-from APIclasses.creatureData import abilities, getSenses, getSpeed
+from APIclasses.creatures import GetMonster
 
 base_url = "https://www.dnd5eapi.co/api/"
 
@@ -41,42 +40,7 @@ def getMonster(url):
         print('returned nothing')
         return
 
-    speed = getSpeed(monster_data['speed'])
-    senses = getSenses(monster_data['senses'])
-
-    ability_scores = abilities(
-        monster_data['strength'],
-        monster_data['dexterity'],
-        monster_data['constitution'],
-        monster_data['intelligence'],
-        monster_data['wisdom'],
-        monster_data['charisma']
-    )
-
-    return monster(
-        monster_data['name'],
-        monster_data['size'],
-        monster_data['alignment'],
-        monster_data['armor_class'],
-        monster_data['hit_points'],
-        monster_data['hit_points'],
-        monster_data['hit_dice'],
-        speed,
-        ability_scores,
-        list(),
-        list(),
-        list(),
-        list(),
-        list(),
-        senses,
-        list(),
-        list(),
-        list(),
-        monster_data['type'],
-        monster_data['subtype'],
-        monster_data['challenge_rating'],
-        monster_data['xp']
-    )
+    return GetMonster(monster_data)
 
 def searchItem(name):
     return searchInfo(f'equipment {name}')
@@ -95,10 +59,14 @@ def getItem(url):
         if isinstance(description, list):
             description = '\n'.join(description)
 
+    weight = ''
+    if "weight" in item_data:
+        weight = item_data['weight']
+
     return item(
         item_data['name'],
         item_data['equipment_category']['name'],
         cost,
-        item_data['weight'],
+        weight,
         description
     )

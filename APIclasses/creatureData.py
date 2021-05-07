@@ -1,3 +1,4 @@
+from APIclasses.itemData import GetDamage, damage
 from dataclasses import dataclass
 
 @dataclass
@@ -17,7 +18,7 @@ class fly(speed):
 class climb(speed):
     value: int
 
-def getSpeed(data):
+def GetSpeed(data):
     speeds = list()
     if 'walk' in data:
         speeds.append(walk(int(data['walk'][:-4])))
@@ -49,14 +50,38 @@ class sense:
 class passivePerception(sense):
     value: int
 
-def getSenses(data):
+def GetSenses(data):
     senses = list()
     if 'passive_perception' in data:
         senses.append(passivePerception(data['passive_perception']))
     
     return senses
 
+@dataclass
+class proficiency:
+    name: str
+    value: int
+
+def GetProficiency(data):
+    return proficiency(
+        data['proficiency']['name'],
+        data['value']
+    )
 
 @dataclass
 class action:
     name: str
+    desc: str
+    attack_bonus: int
+    damage: list[damage]
+
+def GetAction(data):
+    if "attack_bonus" in data:
+        return action(
+            data['name'],
+            data['desc'],
+            data['attack_bonus'],
+            [GetDamage(x) for x in data['damage']]
+        )
+
+    return "undefined"

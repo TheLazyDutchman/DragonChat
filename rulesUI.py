@@ -35,7 +35,10 @@ class rulesWindow(ttk.Frame):
         name = name.lower()
 
         for optionList in self.options:
-            ttk.Label(self.searchOptionsBox.scrollable_frame, text=optionList[0]).pack()
+            label = ttk.Label(self.searchOptionsBox.scrollable_frame, text=optionList[0])
+            self.searchOptionsBox.bind(label)
+            label.pack()
+
             for option in optionList[1]:
                 if name in option['name'].lower():
                     button = ttk.Button(
@@ -56,6 +59,8 @@ class rulesWindow(ttk.Frame):
             frame = monster.show(self.text.scrollable_frame)
             frame.pack()
             self.text.bind(frame)
+            for child in frame.winfo_children():
+                self.text.bind(child)
 
         if type == 'Items':
             item = dndApi.getItem(url)
@@ -64,3 +69,5 @@ class rulesWindow(ttk.Frame):
             frame = item.show(self.text.scrollable_frame)
             frame.pack()
             self.text.bind(frame)
+            for child in frame.winfo_children():
+                self.text.bind(child)
