@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from APIclasses.creatureData import GetAction, GetProficiency, GetSenses, GetSpeed, climb, fly, proficiency, speed, swim, walk, abilities, sense, action
+from APIclasses.creatureData import GetAction, GetLegendaryAction, GetProficiency, GetSenses, GetSpecialAbility, GetSpeed, climb, fly, legendaryAction, proficiency, specialAbility, speed, swim, usage, walk, abilities, sense, action
 import math
 import tkinter.ttk as ttk
 
@@ -106,19 +106,13 @@ class creature:
             return
         ttk.Label(window, text="actions:").pack(anchor="nw")
         for action in self.actions:
-
-            if action == "undefined":
-                ttk.Label(window, text="action undefined").pack(anchor="nw")
-                continue
-
+            ttk.Label(window, text='').pack()
             ttk.Label(window, text=f"name: {action.name}").pack(anchor="nw")
             ttk.Label(window, text="description:").pack(anchor="nw")
-            ttk.Label(window, text=action.desc).pack(anchor="nw")
-            ttk.Label(window, text=f"attack bonus: {action.attack_bonus}").pack(anchor="nw")
-            ttk.Label(window, text="damage:").pack(anchor="nw")
-            for damage in action.damage:
-                ttk.Label(window, text=damage.type + f" ({damage.dice})").pack(anchor="nw")
-
+            ttk.Label(window, text=action.desc, wraplength=380).pack(anchor="nw")
+            
+            if action.actionUsage != None:
+                self.showUsage(window, action.actionUsage)
 
     def showReactions(self, window):
         if len(self.reactions) == 0:
@@ -155,8 +149,19 @@ class creature:
         for immunity in self.condition_immunities:
             ttk.Label(window, text=immunity).pack(anchor="nw")
 
+    def showUsage(self, window, data: usage):
+        ttk.Label(window, text=f"usage:").pack(anchor="nw")
+
+        if data.type == 'per day':
+            ttk.Label(window, text=f"{data.times} times per day").pack(anchor="nw")
+        if data.type == 'recharge on roll':
+            ttk.Label(window, text=f"roll {data.dice}, on a minimum of {data.min_value}, recharge usage").pack(anchor="nw")
+
+
 @dataclass
 class monster(creature):
+    specialAbilities: list[specialAbility]
+    legendaryActions: list[legendaryAction]
     monster_type: str
     subtype: str
     cr: float
@@ -164,6 +169,20 @@ class monster(creature):
 
     def show(self, window):
         frame = super().show(window)
+
+        if len(self.legendaryActions) > 0:
+            ttk.Label(frame, text=f"Legendary Actions:").pack(anchor="nw")
+            for action in self.legendaryActions:
+                ttk.Label(frame, text=f"name: {action.name}").pack(anchor="nw")
+                ttk.Label(frame, text=f"desc: {action.desc}", wraplength=380).pack(anchor="nw")
+
+        if len(self.specialAbilities) > 0:
+            ttk.Label(frame, text=f"Special Abilities:").pack(anchor="nw")
+            for ability in self.specialAbilities:
+                ttk.Label(frame, text=f"name: {ability.name}").pack(anchor="nw")
+                ttk.Label(frame, text=f"desc: {ability.desc}", wraplength=380).pack(anchor="nw")
+                if ability.abilityUsage != None:
+                    self.showUsage(frame, ability.abilityUsage)
 
         ttk.Label(frame, text=f"monster type: {self.monster_type}").pack(anchor="nw")
         if self.subtype != None:
@@ -201,7 +220,15 @@ def GetMonster(monster_data):
 
     reactions = list()
     if "reactions" in monster_data:
-        reactions = monster_data['reactions']
+        reactions = [GetAction(x) for x in monster_data['reactions']]
+
+    legendaryActions = list()
+    if "legendary_actions" in monster_data: 
+        legendaryActions = [GetLegendaryAction(x) for x in monster_data['legendary_actions']]
+
+    specialAbilities = list()
+    if "special_abilities" in monster_data:
+        specialAbilities = [GetSpecialAbility(x) for x in monster_data['special_abilities']]
 
     description = ''
     if "desc" in monster_data:
@@ -227,6 +254,8 @@ def GetMonster(monster_data):
         actions,
         reactions,
         description,
+        specialAbilities,
+        legendaryActions,
         monster_data['type'],
         monster_data['subtype'],
         monster_data['challenge_rating'],

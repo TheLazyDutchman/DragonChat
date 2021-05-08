@@ -14,20 +14,21 @@ class item:
     def show(self, window):
         frame = ttk.Frame(window)
 
-        ttk.Label(frame, text=f"Name: {self.name}").pack()
-        ttk.Label(frame, text=f"Category: {self.equipment_category}").pack()
+        ttk.Label(frame, text=f"Name: {self.name}").pack(anchor="nw")
+        ttk.Label(frame, text=f"Category: {self.equipment_category}").pack(anchor="nw")
         self.showCost(frame)
-        ttk.Label(frame, text=f"Weight: {self.weight}").pack()
-        ttk.Label(frame, text="Description").pack()
-        description = tk.Text(frame)
-        description.insert(0.0, self.description)
-        description.configure(state='disabled')
-        description.pack()
+
+        if self.weight != '':
+            ttk.Label(frame, text=f"Weight: {self.weight}").pack(anchor="nw")
+            
+        if self.description != '':
+            ttk.Label(frame, text="Description:").pack(anchor="nw")
+            ttk.Label(frame, text=self.description).pack(anchor="nw")
 
         return frame
 
     def showCost(self, window):
-        ttk.Label(window, text=f"Cost: {self.cost.quantity} {self.cost.unit}").pack()
+        ttk.Label(window, text=f"Cost: {self.cost.quantity} {self.cost.unit}").pack(anchor="nw")
 
 
 @dataclass
