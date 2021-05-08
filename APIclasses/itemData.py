@@ -8,20 +8,9 @@ class currency(Enum):
     gold = 3
     platinum = 4
 
-class damage_type(Enum):
-    acid = 0
-    bludgeoning = 1
-    cold = 2
-    fire = 3
-    force = 4
-    lightning = 5
-    necrotic = 6
-    piercing = 7
-    poison = 8
-    psychic = 9
-    radiant = 10
-    slashing = 11
-    thunder = 12
+def getCurrency(string):
+    print(string)
+    return currency.gold
 
 class weapon_range(Enum):
     melee = 0
@@ -47,7 +36,13 @@ class armorclass:
 @dataclass
 class damage:
     dice: str
-    type: damage_type
+    type: str
+
+def GetDamage(data):
+    return damage(
+        data['damage_dice'],
+        data['damage_type']['name']
+    )
 
 @dataclass
 class fighting_range:

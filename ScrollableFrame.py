@@ -4,9 +4,9 @@ import tkinter.ttk as ttk
 class ScrollableFrame(ttk.Frame):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
-        self.canvas = tk.Canvas(self)
+        self.canvas = tk.Canvas(self, *args, **kwargs)
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
-        self.scrollable_frame = ttk.Frame(self.canvas)
+        self.scrollable_frame = ttk.Frame(self.canvas, *args, **kwargs)
 
         self.scrollable_frame.bind(
             "<Configure>",
@@ -47,6 +47,7 @@ class ScrollableFrame(ttk.Frame):
             widget.destroy()
 
         self.objAmount = 0
+        self.canvas.yview_moveto(0.0)
 
     def bindObj(self, obj, indentLevel = 0):
         obj.grid(row=self.objAmount, column = 0, columnspan = 8, sticky="NW")
@@ -57,3 +58,8 @@ class ScrollableFrame(ttk.Frame):
         obj.bind("<Button-5>", self.mouse_wheel) # Linux mouse wheel event (Down)
 
         return obj
+
+    def bind(self, obj):
+        obj.bind("<MouseWheel>", self.mouse_wheel) # Windows mouse wheel event
+        obj.bind("<Button-4>", self.mouse_wheel) # Linux mouse wheel event (Up)
+        obj.bind("<Button-5>", self.mouse_wheel) # Linux mouse wheel event (Down)

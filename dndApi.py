@@ -1,8 +1,9 @@
+from APIclasses.items import item
+from APIclasses.itemData import getCurrency, price
 import json
 import requests
 
-from APIclasses.creatures import monster
-from APIclasses.creatureData import abilities, getAlignment, getSenses, getSize, getSpeed
+from APIclasses.creatures import GetMonster
 
 base_url = "https://www.dnd5eapi.co/api/"
 
@@ -12,8 +13,6 @@ def getInfo(request):
         sub_url = sub_url[5:]
 
     url = base_url + sub_url
-
-    print(url)
 
     response = requests.get(url)
     if response.status_code == 200:
@@ -41,42 +40,33 @@ def getMonster(url):
         print('returned nothing')
         return
 
+    return GetMonster(monster_data)
 
-    size = getSize(monster_data['size'])
-    alignment = getAlignment(monster_data['alignment'])
-    speed = getSpeed(monster_data['speed'])
-    senses = getSenses(monster_data['senses'])
+def searchItem(name):
+    return searchInfo(f'equipment {name}')
 
-    ability_scores = abilities(
-        monster_data['strength'],
-        monster_data['dexterity'],
-        monster_data['constitution'],
-        monster_data['intelligence'],
-        monster_data['wisdom'],
-        monster_data['charisma']
+def getItem(url):
+    item_data = getInfo(url)
+
+    cost = price(
+        item_data['cost']['quantity'], 
+        getCurrency(item_data['cost']['unit'])
     )
 
-    return monster(
-        monster_data['name'],
-        size,
-        alignment,
-        monster_data['armor_class'],
-        monster_data['hit_points'],
-        monster_data['hit_points'],
-        monster_data['hit_dice'],
-        speed,
-        ability_scores,
-        list(),
-        list(),
-        list(),
-        list(),
-        list(),
-        senses,
-        list(),
-        list(),
-        list(),
-        monster_data['type'],
-        monster_data['subtype'],
-        monster_data['challenge_rating'],
-        monster_data['xp']
+    description = ''
+    if "desc" in item_data:
+        description = item_data['desc']
+        if isinstance(description, list):
+            description = '\n'.join(description)
+
+    weight = ''
+    if "weight" in item_data:
+        weight = item_data['weight']
+
+    return item(
+        item_data['name'],
+        item_data['equipment_category']['name'],
+        cost,
+        weight,
+        description
     )
