@@ -2,9 +2,7 @@ import random
 import regex
 
 def RollDice(diceString):
-    # d20 + 6, 4d6 + 2, d20a + 3
     match = regex.search(r"(\d*)d(\d+)([ad]?)(\+(\d+))?", diceString)
-    print(match, match.groups())
 
     diceAmount = match.groups()[0]
     if diceAmount == '':
@@ -32,7 +30,3 @@ def RollDice(diceString):
         sum += amount
     
     return sum + bonus
-
-print(RollDice("2d6+4"))
-print(RollDice("d20+4"))
-print(RollDice("d20a+10"))
