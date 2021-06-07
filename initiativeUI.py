@@ -163,7 +163,7 @@ class initiativeWindow(ttk.Frame):
         return [x[0] for x in self.initiative]
 
     def sendChanges(self):
-        self.main.sendMsg(("initiative", self.initiative, self.curCreature))
+        self.main.sendMsg(("initiative", self.initiative, self.curCreature)) # TODO: add server support for initiative row
 
     def appendChanges(self, initiative, curCreature):
         self.initiative = initiative

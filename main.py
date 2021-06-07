@@ -14,10 +14,10 @@ soundRecvPort = 5560
 
 camera = VideoStream().start()
 
-with ClientConnection.Connections(socket.gethostname(), serverIp) as server:
+with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as server:
     main = window.main(socket.gethostname(), "D&D messaging", server, server.send_msg)
 
-    server.start_imageLoop(imgSendPort, imgRecvPort, camera)
+    # server.start_imageLoop(imgSendPort, imgRecvPort, camera)
     server.start_textLoop(textSendPort, textRecvPort, main.handleMsg)
     # server.start_soundLoop(soundSendPort, soundRecvPort)
 

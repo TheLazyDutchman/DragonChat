@@ -12,7 +12,7 @@ class chatTextWindow(ScrollableFrame):
         self.grid(row=0, column=0)
 
     def displayMessage(self, message):
-        self.bindObj(ttk.Label(self.scrollable_frame, text=message[0] + " : " + message[1]))
+        self.bindObj(ttk.Label(self.scrollable_frame, text=message))
         time.sleep(0.01)
         self.canvas.yview_moveto(1)
 
@@ -49,7 +49,7 @@ class chatInputWindow(ttk.Frame):
         text = self.input.get()
         if not len(text) == 0:
             if not text[0] == "!":
-                self.callBack(("msg", self.main.name, text))
+                self.callBack(text)
             else:
                 self.selectedCommand[1].callCommand(self.parameters)
             
@@ -80,7 +80,4 @@ class chatWindow(ttk.Frame):
         self.grid(row=0, column=0, )
 
     def handleMsg(self, msg):
-        if msg[0] == "msg":
-            self.text.displayMessage(msg[1:])
-        if msg[0] == "initiative":
-            self.main.appendInitiativeChanges(msg[1], msg[2])
+        self.text.displayMessage(msg)

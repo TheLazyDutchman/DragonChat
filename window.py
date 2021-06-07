@@ -92,14 +92,13 @@ class textWindow(ttk.Frame):
 
 class main(tk.Tk):
 
-    def __init__(self, name, title, server, textCallBack, *args, **kwargs):
+    def __init__(self, name, title, server, serverSendMessage, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.wm_title(title)
-        self.sendMsg = textCallBack
 
         self.videos = videosWindow(self, self, server, 2)
-        self.text = textWindow(self, self, textCallBack)
+        self.text = textWindow(self, self, serverSendMessage)
 
         # self.addChatCommand("rule", self.text.rules.displayRule)
 
