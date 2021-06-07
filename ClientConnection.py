@@ -6,11 +6,13 @@ from cv2 import cv2
 from VideoStreamSubscriber import VideoStreamSubscriber
 import numpy as np
 import pyaudio
+import pickle
 
 class Connections:
 
-    def __init__(self, name, serverIp):
-        self.name = name
+    def __init__(self, name : str, group : str, serverIp):
+        self.userName = name
+        self.groupName = group
         self.serverIp = serverIp
         self.imgStarted = False
 
@@ -44,7 +46,8 @@ class Connections:
         self.textSender.connect(f"tcp://{self.serverIp}:{textSendPort}")
         self.textReciever = context.socket(zmq.SUB)
         self.textReciever.connect(f"tcp://{self.serverIp}:{textRecvPort}")
-        self.textReciever.subscribe("")
+        self.textReciever.subscribe(self.groupName.encode('utf-8'))
+        self.textReciever.subscribe(self.userName.encode('utf-8'))
         self.textCallBack = textCallBack
         
         txtThread = threading.Thread(target=self.textLoop)
@@ -75,7 +78,7 @@ class Connections:
             while True:
                 image = self.camera.read()
                 _, sendImg = cv2.imencode(".jpg", image)
-                self.imageSender.send_jpg(self.name, sendImg)
+                self.imageSender.send_jpg(self.userName, sendImg)
 
                 # recv images from the server
                 self.images = self.imageReciever.receive()
@@ -99,10 +102,12 @@ class Connections:
         try:
             lastText = ""
             while True:
-                data = self.textReciever.recv_pyobj()
-                if not data is lastText and len(data[1]) > 0:
-                    lastText = data
-                    self.textCallBack(data)
+                group, message = self.textReciever.recv_multipart()
+                message = pickle.loads(message)
+                if not message is lastText and len(message) > 0:
+                    lastText = message
+                    print(message)
+                    self.textCallBack(message)
 
         except (KeyboardInterrupt, SystemExit):
             print("text loop interrupted by keyboard")
@@ -111,7 +116,8 @@ class Connections:
             traceback.print_exc()
 
     def send_msg(self, msg):
-        self.textSender.send_pyobj(msg)
+        message = pickle.dumps((self.groupName, self.userName, msg))
+        self.textSender.send_multipart((b"message", message))
 
         self.textSender.recv()
 
@@ -127,11 +133,11 @@ class Connections:
 
             while True:
                 sound = recordStream.read(self.chunk)
-                self.soundSender.send_pyobj((self.name, sound))
+                self.soundSender.send_pyobj((self.userName, sound))
 
                 # recv sound from the server
                 name, sound = self.soundReciever.recv_pyobj()
-                if not name == self.name:
+                if not name == self.userName:
                     if not name in clients:
                         clients[name] = self.audio.open(rate=self.fs, 
                                                         channels=self.channels, 
