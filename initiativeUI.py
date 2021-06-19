@@ -5,7 +5,7 @@ from dndApi import searchMonster, getMonster
 
 class initiativeWindow(ttk.Frame):
 
-    def __init__(self, main, parent, *args, **kwargs):
+    def __init__(self, main, parent, creatureHandler, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.main = main
 
@@ -13,6 +13,8 @@ class initiativeWindow(ttk.Frame):
         self.listFrame = ttk.Frame(self)
 
         self.started = False
+
+        self.creatureHandler = creatureHandler
 
         self.addCreaturesFrame = self.showAddMonstersUI()
 
@@ -106,10 +108,13 @@ class initiativeWindow(ttk.Frame):
         return len(self.initiative) > 0
 
     def AddCreature(self, name, initiative):
-        self.initiative.append((name, int(initiative)))
-        self.initiative.sort(key=lambda x: x[1], reverse=True)
-        self.curCreature = self.initiative[0]
-        self.sendChanges()
+        # self.initiative.append((name, int(initiative)))
+        # self.initiative.sort(key=lambda x: x[1], reverse=True)
+        # self.curCreature = self.initiative[0]
+        # self.sendChanges()
+
+        print(name)
+        self.creatureHandler.addCreature(name)
 
     def AddCreatures(self, name, amount, bonus):
         for i in range(int(amount)):

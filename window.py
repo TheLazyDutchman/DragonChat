@@ -74,16 +74,16 @@ class videosWindow(ttk.Frame):
 
 class textWindow(ttk.Frame):
 
-    def __init__(self, main, parent, chatSendCallback, *args, **kwargs):
+    def __init__(self, main, parent, handlers, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.main = main
         self.commands = list()
 
         self.grid(row=0, column=1)
 
-        self.chat = chatWindow(self.main, self, chatSendCallback)
+        self.chat = chatWindow(self.main, self, handlers["chat"])
         self.rules = rulesWindow(self)
-        self.initiative = initiativeWindow(self.main, self)
+        self.initiative = initiativeWindow(self.main, self, handlers["creatures"])
 
     def addChatCommand(self, name, callBack):
         self.commands.append(userCommands.Command(name, callBack))
@@ -92,13 +92,13 @@ class textWindow(ttk.Frame):
 
 class main(tk.Tk):
 
-    def __init__(self, name, title, server, serverSendMessage, *args, **kwargs):
+    def __init__(self, name, title, server, handlers, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.wm_title(title)
 
-        self.videos = videosWindow(self, self, server, 2)
-        self.text = textWindow(self, self, serverSendMessage)
+        # self.videos = videosWindow(self, self, server, 2)
+        self.text = textWindow(self, self, handlers)
 
         # self.addChatCommand("rule", self.text.rules.displayRule)
 
