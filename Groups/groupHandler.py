@@ -12,8 +12,12 @@ class groupHandler:
         data = pickle.dumps((groupName, password, self.userName))
         self.sendSocket.send_multipart((b"createGroup", data))
         answer = self.sendSocket.recv()
+        answer = pickle.loads(answer)
 
-        if answer != b"OK":
+        if answer[0] != "OK":
+            if answer[0] == "group already exists":
+                return self.joinGroup(groupName, password)
+
             return False, answer
 
         self.groupName = groupName
@@ -29,8 +33,9 @@ class groupHandler:
         data = pickle.dumps((groupName, password, self.userName))
         self.sendSocket.send_multipart((b"joinGroup", data))
         answer = self.sendSocket.recv()
+        answer = pickle.loads(answer)
 
-        if answer != b"OK":
+        if answer[0] != "OK":
             return False, answer
 
         self.groupName = groupName
