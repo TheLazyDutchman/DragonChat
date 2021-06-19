@@ -3,6 +3,7 @@ from imutils.video import VideoStream
 import socket
 import window
 from Chat.chatHandler import chatHandler
+from Groups.groupHandler import groupHandler
 
 
 serverIp = "212.187.9.198"
@@ -17,6 +18,9 @@ camera = VideoStream().start()
 
 with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as server:
     server.initialize_text_data(textSendPort, textRecvPort)
+
+    group = groupHandler(serverIp, server.textSender)
+    group.createGroup("group", '')
 
     chat = chatHandler("group", serverIp, server.textSender)
 
