@@ -15,8 +15,7 @@ class groupHandler(Handler):
 
             return False, answer
 
-        self.groupName = groupName
-        return True, answer
+        return True, groupName
 
     def getGroups(self) -> list[str]:
         self.sendSocket.send_multipart((b"getGroups", None))

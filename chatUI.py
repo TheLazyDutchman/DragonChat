@@ -70,12 +70,12 @@ class chatInputWindow(ttk.Frame):
 
 class chatWindow(ttk.Frame):
 
-    def __init__(self, main, parent, textCallBack, *args, **kwargs):
+    def __init__(self, main, parent, chatHandler, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.main = main
 
         self.text = chatTextWindow(self.main, self)
-        self.input = chatInputWindow(self.main, self, textCallBack)
+        self.input = chatInputWindow(self.main, self, chatHandler.sendMessage)
 
         self.grid(row=0, column=0, )
 

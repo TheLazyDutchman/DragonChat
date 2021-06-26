@@ -4,6 +4,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Groups.groupHandler import groupHandler
+from Creatures.creatureHandler import creatureHandler
 
 
 serverIp = "212.187.9.198"
@@ -20,11 +21,21 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
     server.initialize_text_data(textSendPort, textRecvPort)
 
     group = groupHandler(serverIp, server.textSender)
-    group.createGroup("group", '')
+    status, groupName = group.createGroup("group", '')
+
+    print(status, groupName)
+
+    creatures = creatureHandler(groupName, serverIp, server.textSender)
 
     chat = chatHandler("group", serverIp, server.textSender)
 
-    main = window.main(socket.gethostname(), "D&D messaging", server, chat.sendMessage)
+    handlers = {
+        "group" : group,
+        "creatures" : creatures,
+        "chat" : chat
+    }
+
+    main = window.main(socket.gethostname(), "D&D messaging", server, handlers)
 
     server.start_textLoop(main.handleMsg)
 
