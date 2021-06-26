@@ -137,7 +137,7 @@ class main(tk.Tk):
 
     # initiative window funtions--------------------------------
 
-    def handleInitiative(data):
+    def handleInitiative(self, data):
         print(data)
 
     def appendInitiativeChanges(self, initiative, curCreature):
