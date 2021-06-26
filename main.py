@@ -23,8 +23,6 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
     group = groupHandler(serverIp, server.textSender)
     status, groupName = group.createGroup("group", '')
 
-    print(status, groupName)
-
     creatures = creatureHandler(groupName, serverIp, server.textSender)
 
     chat = chatHandler("group", serverIp, server.textSender)

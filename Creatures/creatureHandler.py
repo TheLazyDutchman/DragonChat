@@ -1,19 +1,12 @@
-import pickle
-
-class creatureHandler:
-
-    def __init__(self, groupName, userName, sendSocket):
-        self.groupName = groupName
-        self.userName = userName
-        self.sendSocket = sendSocket
+from ServerHandler.Handler import Handler
+class creatureHandler(Handler):
 
     def addCreature(self, creatureName):
-        data = pickle.dumps((self.groupName, self.userName, creatureName))
+        data = (self.groupName, self.userName, creatureName)
 
-        self.sendSocket.send_multipart((b"addCreature", data))
-        answer = self.sendSocket.recv()
+        answer = self.SendServerMessage("addCreature", data)
 
-        if answer != b"OK" or not str(answer).isnumeric():
+        if answer[0] != "OK" or not str(answer[0]).isnumeric():
             return False, answer
 
         return True, answer
