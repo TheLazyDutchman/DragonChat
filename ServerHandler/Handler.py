@@ -2,7 +2,7 @@ import pickle
 
 class Handler:
 
-    def __init__(self, groupName, userName, sendSocket):
+    def __init__(self, groupName: str, userName: str, sendSocket):
         self.groupName = groupName
         self.userName = userName
         self.sendSocket = sendSocket

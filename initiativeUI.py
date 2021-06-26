@@ -63,7 +63,7 @@ class initiativeWindow(ttk.Frame):
         ttk.Entry(frame, textvariable=numCreatures).pack()
 
         ttk.Button(frame, text="add creatures", command=lambda : 
-            self.AddMonsters(values[monsterOptions.current()][1], numCreatures.get())).pack()
+            self.AddMonster(values[monsterOptions.current()][1])).pack()
 
         ttk.Button(frame, text="start initiative", command=self.start).pack()
 
@@ -121,11 +121,9 @@ class initiativeWindow(ttk.Frame):
             num = random.randint(1, 20) + int(bonus)
             self.AddCreature(name + str(i), num)
 
-    def AddMonsters(self, name, amount):
+    def AddMonster(self, name):
         monster = getMonster(name)
-        for i in range(int(amount)):
-            num = random.randint(1, 20) + int(monster.getDEXbonus())
-            self.AddCreature(monster.name + str(i), num)
+        self.AddCreature(monster.name, 0)
 
     def RemoveCreature(self, name):
         creature = None

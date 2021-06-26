@@ -108,8 +108,8 @@ class Connections:
                 message = pickle.loads(message)
                 if not message is lastText and len(message) > 0:
                     lastText = message
-                    print(message)
-                    self.textCallBack(message)
+                    msgType, data = message
+                    self.textCallBack(msgType, data)
 
         except (KeyboardInterrupt, SystemExit):
             print("text loop interrupted by keyboard")
