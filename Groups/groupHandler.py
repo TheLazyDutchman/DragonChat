@@ -1,18 +1,13 @@
-import pickle
+from ServerHandler.Handler import Handler
 
-class groupHandler:
+class groupHandler(Handler):
 
     def __init__(self, userName, sendSocket):
-        self.sendSocket = sendSocket
-        self.userName = userName
-
-        self.groupName = ''
+        super().__init__('', userName, sendSocket)
 
     def createGroup(self, groupName, password):
-        data = pickle.dumps((groupName, password, self.userName))
-        self.sendSocket.send_multipart((b"createGroup", data))
-        answer = self.sendSocket.recv()
-        answer = pickle.loads(answer)
+        data = (groupName, password, self.userName)
+        answer = self.SendServerMessage("createGroup", data)
 
         if answer[0] != "OK":
             if answer[0] == "group already exists":
@@ -30,10 +25,8 @@ class groupHandler:
         return groups
 
     def joinGroup(self, groupName, password):
-        data = pickle.dumps((groupName, password, self.userName))
-        self.sendSocket.send_multipart((b"joinGroup", data))
-        answer = self.sendSocket.recv()
-        answer = pickle.loads(answer)
+        data = (groupName, password, self.userName)
+        answer = self.SendServerMessage("joinGroup", data)
 
         if answer[0] != "OK":
             return False, answer
