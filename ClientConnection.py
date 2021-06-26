@@ -40,7 +40,7 @@ class Connections:
 
         self.imgStarted = True
 
-    def start_textLoop(self, textSendPort, textRecvPort, textCallBack):
+    def initialize_text_data(self, textSendPort, textRecvPort):
         context = zmq.Context()
         self.textSender = context.socket(zmq.REQ)
         self.textSender.connect(f"tcp://{self.serverIp}:{textSendPort}")
@@ -48,6 +48,8 @@ class Connections:
         self.textReciever.connect(f"tcp://{self.serverIp}:{textRecvPort}")
         self.textReciever.subscribe(self.groupName.encode('utf-8'))
         self.textReciever.subscribe(self.userName.encode('utf-8'))
+
+    def start_textLoop(self, textCallBack):
         self.textCallBack = textCallBack
         
         txtThread = threading.Thread(target=self.textLoop)
@@ -114,12 +116,6 @@ class Connections:
         except Exception:
             print("unhandled exception")
             traceback.print_exc()
-
-    def send_msg(self, msg):
-        message = pickle.dumps((self.groupName, self.userName, msg))
-        self.textSender.send_multipart((b"message", message))
-
-        self.textSender.recv()
 
     def soundLoop(self):
         try:
