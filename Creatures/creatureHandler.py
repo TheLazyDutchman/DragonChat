@@ -2,7 +2,11 @@ from ServerHandler.Handler import Handler
 class creatureHandler(Handler):
 
     def addCreature(self, creatureName):
-        data = (self.groupName, self.userName, creatureName)
+        creatureData = {
+            "name": creatureName,
+            "controller": self.userName
+        }
+        data = (self.groupName, creatureData)
 
         answer = self.SendServerMessage("addCreature", data)
 
