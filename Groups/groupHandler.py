@@ -31,5 +31,4 @@ class groupHandler(Handler):
         if answer[0] != "OK":
             return False, answer
 
-        self.groupName = groupName
-        return True, answer
+        return True, groupName
