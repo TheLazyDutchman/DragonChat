@@ -108,67 +108,17 @@ class initiativeWindow(ttk.Frame):
         return len(self.initiative) > 0
 
     def AddCreature(self, name, initiative):
-        # self.initiative.append((name, int(initiative)))
-        # self.initiative.sort(key=lambda x: x[1], reverse=True)
-        # self.curCreature = self.initiative[0]
-        # self.sendChanges()
-
-        print(name)
         self.creatureHandler.addCreature(name)
-
-    def AddCreatures(self, name, amount, bonus):
-        for i in range(int(amount)):
-            num = random.randint(1, 20) + int(bonus)
-            self.AddCreature(name + str(i), num)
 
     def AddMonster(self, name):
         monster = getMonster(name)
         self.AddCreature(monster.name, 0)
 
-    def RemoveCreature(self, name):
-        creature = None
-        for c in self.initiative:
-            if c[0] == name:
-                creature = c
-                break
-        if creature is self.curCreature:
-            index = self.initiative.index(self.curCreature)
-            self.curCreature = self.initiative[index + 1]
-
-        if not creature is None:
-            self.initiative.remove(c)
-        
-        self.sendChanges()
-
-    def displayInitiative(self):
+    def ShowInitiative(self, initiativeList: list[tuple[str, str]]):
         self.listFrame.grid_remove()
         self.listFrame = ttk.Frame(self)
-        index = self.initiative.index(self.curCreature)
-        initiative = self.initiative[index:]
-        initiative.extend(self.initiative[:index])
-        for i in range(len(initiative)):
-            label = ttk.Label(self.listFrame, text=initiative[i][0] + " : " + str(initiative[i][1]))
-            label.grid(row=i, column=0)
+
+        for userName, creature in initiativeList:
+            ttk.Label(self.listFrame, text=f"{creature}: {userName}").pack()
 
         self.listFrame.grid(column=0, row=0)
-    
-    def nextTurn(self):
-        index = self.initiative.index(self.curCreature)
-        newIndex = (index + 1) % len(self.initiative)
-
-        self.curCreature = self.initiative[newIndex]
-        self.sendChanges()
-
-    def nextTurnPossible(self):
-        return self.started
-
-    def getNames(self):
-        return [x[0] for x in self.initiative]
-
-    def sendChanges(self):
-        self.main.sendMsg(("initiative", self.initiative, self.curCreature)) # TODO: add server support for initiative row
-
-    def appendChanges(self, initiative, curCreature):
-        self.initiative = initiative
-        self.curCreature = curCreature
-        self.displayInitiative()
