@@ -9,6 +9,7 @@ from ServerHandler.EventHandler import EventHandler
 
 
 serverIp = "212.187.9.198"
+
 imgSendPort = 5555
 imgRecvPort = 5556
 textSendPort = 5557
@@ -16,17 +17,19 @@ textRecvPort = 5558
 soundSendPort = 5559
 soundRecvPort = 5560
 
+userName = "testUser"
+
 camera = VideoStream().start()
 
 with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as server:
     server.initialize_text_data(textSendPort, textRecvPort)
 
-    group = groupHandler(serverIp, server.textSender)
+    group = groupHandler(userName, server.textSender)
     status, groupName = group.createGroup("group", '')
 
-    creatures = creatureHandler(groupName, serverIp, server.textSender)
+    creatures = creatureHandler(groupName, userName, server.textSender)
 
-    chat = chatHandler("group", serverIp, server.textSender)
+    chat = chatHandler(groupName, userName, server.textSender)
 
     handlers = {
         "group" : group,
@@ -36,7 +39,7 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
 
     main = window.main(socket.gethostname(), "D&D messaging", server, handlers)
 
-    eventListener = EventHandler(groupName, serverIp, server.textSender)
+    eventListener = EventHandler(groupName, userName, server.textSender)
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.handleInitiative)
 
