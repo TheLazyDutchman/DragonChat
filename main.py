@@ -4,7 +4,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Groups.groupHandler import groupHandler
-from Creatures.creatureHandler import creatureHandler
+from Creatures.CreatureHandler import CreatureHandler
 from ServerHandler.EventHandler import EventHandler
 
 
@@ -27,7 +27,7 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
     group = groupHandler(userName, server.textSender)
     status, groupName = group.createGroup("group", '')
 
-    creatures = creatureHandler(groupName, userName, server.textSender)
+    creatures = CreatureHandler(groupName, userName, server.textSender)
 
     chat = chatHandler(groupName, userName, server.textSender)
 
@@ -42,6 +42,7 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
     eventListener = EventHandler(groupName, userName, server.textSender)
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.handleInitiative)
+    eventListener.addListener("Creatures", main.creatureWindow.handleServerCreatures)
 
     server.start_textLoop(eventListener.HandleEvent)
 

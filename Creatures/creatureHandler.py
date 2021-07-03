@@ -1,5 +1,5 @@
 from ServerHandler.Handler import Handler
-class creatureHandler(Handler):
+class CreatureHandler(Handler):
 
     def addCreature(self, creatureName):
         creatureData = {

@@ -1,3 +1,4 @@
+from Creatures.CreatureWindow import CreatureWindow
 import tkinter as tk
 import tkinter.ttk as ttk
 from cv2 import cv2
@@ -99,6 +100,8 @@ class main(tk.Tk):
 
         # self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, handlers)
+        self.creatureWindow = CreatureWindow(handlers["creatures"], self)
+        self.creatureWindow.grid(column=2, row=0)
 
         # self.addChatCommand("rule", self.text.rules.displayRule)
 
