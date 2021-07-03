@@ -6,6 +6,7 @@ from Chat.chatHandler import chatHandler
 from Groups.groupHandler import groupHandler
 from Creatures.CreatureHandler import CreatureHandler
 from ServerHandler.EventHandler import EventHandler
+from Initiative.InitiativeHandler import InitiativeHandler
 
 
 serverIp = "212.187.9.198"
@@ -31,17 +32,20 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
 
     chat = chatHandler(groupName, userName, server.textSender)
 
+    initiative = InitiativeHandler(groupName, userName, server.textSender)
+
     handlers = {
         "group" : group,
         "creatures" : creatures,
-        "chat" : chat
+        "chat" : chat,
+        "initiative" : initiative
     }
 
     main = window.main(socket.gethostname(), "D&D messaging", server, handlers)
 
     eventListener = EventHandler(groupName, userName, server.textSender)
     eventListener.addListener("Message", main.handleMsg)
-    eventListener.addListener("Initiative", main.handleInitiative)
+    eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
     eventListener.addListener("Creatures", main.creatureWindow.handleServerCreatures)
 
     server.start_textLoop(eventListener.HandleEvent)
