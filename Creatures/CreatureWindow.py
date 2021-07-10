@@ -46,6 +46,9 @@ class CreatureWindow(ttk.Frame):
 
         searchName.trace('w', showMonsterOptions)
             
+    def createCreature(self, creatureName):
+        self.creatureHandler.addCreature(creatureName)
+
     def handleServerCreatures(self, data):
         self.creatureList.grid_forget()
         self.creatureList = ttk.Frame(self)
@@ -55,5 +58,5 @@ class CreatureWindow(ttk.Frame):
             ttk.Label(master=self.creatureList, 
                 text=f"{creature}: {controller}").pack()
 
-    def createCreature(self, creatureName):
-        self.creatureHandler.addCreature(creatureName)
+    def handleStartTurn(self, data):
+        print(data)

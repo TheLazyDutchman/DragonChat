@@ -22,7 +22,7 @@ userName = "testUser"
 
 camera = VideoStream().start()
 
-with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as server:
+with ClientConnection.Connections(userName, "group", serverIp) as server:
     server.initialize_text_data(textSendPort, textRecvPort)
 
     group = groupHandler(userName, server.textSender)
@@ -47,6 +47,7 @@ with ClientConnection.Connections(socket.gethostname(), "group", serverIp) as se
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
     eventListener.addListener("Creatures", main.creatureWindow.handleServerCreatures)
+    eventListener.addListener("Start turn", main.creatureWindow.handleStartTurn)
 
     server.start_textLoop(eventListener.HandleEvent)
 
