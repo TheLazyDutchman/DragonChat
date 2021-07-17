@@ -26,6 +26,6 @@ class InitiativeWindow(ttk.Frame):
         self.initiativeList = ttk.Frame(self)
         self.initiativeList.grid(column=0, row=0)
 
-        for controller, creature, initiative in data:
+        for (controller, creature), initiative in data:
             ttk.Label(master=self.initiativeList, 
                 text=f"{creature}: {controller}: {initiative}").pack()

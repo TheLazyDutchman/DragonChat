@@ -47,7 +47,8 @@ class CreatureWindow(ttk.Frame):
         searchName.trace('w', showMonsterOptions)
             
     def createCreature(self, creatureName):
-        self.creatureHandler.addCreature(creatureName)
+        monsterData = dndApi.getInfo([x[1] for x in self.monsterList if x[0] == creatureName][0])
+        self.creatureHandler.addCreature(monsterData)
 
     def handleServerCreatures(self, data):
         self.creatureList.grid_forget()
