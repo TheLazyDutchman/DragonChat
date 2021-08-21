@@ -1,4 +1,4 @@
-from Creatures.CreatureWindow import CreatureWindow
+from Creatures.CreaturesWindow import CreaturesWindow
 from Initiative.InitiativeWindow import InitiativeWindow
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -100,8 +100,8 @@ class main(tk.Tk):
 
         # self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, handlers)
-        self.creatureWindow = CreatureWindow(handlers["creatures"], self)
-        self.creatureWindow.grid(column=2, row=0)
+        self.creaturesWindow = CreaturesWindow(handlers["creatures"], self)
+        self.creaturesWindow.grid(column=2, row=0)
 
         self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
         self.initiativeWindow.grid(column=2, row=1)

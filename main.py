@@ -46,8 +46,8 @@ with ClientConnection.Connections(userName, "group", serverIp) as server:
     eventListener = EventHandler(groupName, userName, server.textSender)
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
-    eventListener.addListener("Creatures", main.creatureWindow.handleServerCreatures)
-    eventListener.addListener("Start turn", main.creatureWindow.handleStartTurn)
+    eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
+    eventListener.addListener("Creatures", main.creaturesWindow.handleServerCreatures)
 
     server.start_textLoop(eventListener.HandleEvent)
 
