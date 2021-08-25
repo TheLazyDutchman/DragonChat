@@ -60,7 +60,6 @@ with ClientConnection.Connections(userName, "group", serverIp) as server:
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
     eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
-    eventListener.addListener("Creatures", main.creaturesWindow.handleServerCreatures)
     print("added event listeners")
 
     server.start_textLoop(eventListener.HandleEvent)

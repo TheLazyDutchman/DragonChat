@@ -7,7 +7,4 @@ class CreatureHandler(Handler):
 
         answer = self.SendServerMessage("addCreature", data)
 
-        if answer[0] != "OK" or not str(answer[0]).isnumeric():
-            return False, answer
-
-        return True, answer
+        return answer[0]

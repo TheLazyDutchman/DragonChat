@@ -11,7 +11,8 @@ class ActionWindow(ttk.Frame):
         self.action = action
 
         ttk.Label(master = self, text = self.action.name).pack()
-        desc = tk.Text(master = self, width = 40, height = 10)
+
+        desc = tk.Text(master = self, width = 40, height = 4, wrap='word')
         desc.insert(tk.END, self.action.desc)
         desc.config(state = 'disabled')
         desc.pack()

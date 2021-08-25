@@ -11,8 +11,8 @@ class CreaturesWindow(ttk.Frame):
 
         self.creatureHandler = creatureHandler
 
-        self.creatureList = ttk.Frame(self)
-        self.creatureList.grid(column=0, row=0)
+        self.creatureNoteBook = ttk.Notebook(master = self)
+        self.creatureNoteBook.grid(column=0, row=0)
 
         self.monsterList = dndApi.searchMonster('')['results']
         self.monsterList : list[tuple[str, str]] = [(x['name'], x['index']) for x in self.monsterList]
@@ -48,12 +48,8 @@ class CreaturesWindow(ttk.Frame):
         searchName.trace('w', showMonsterOptions)
             
     def createCreature(self, creatureName):
-        self.creatureHandler.addCreature(creatureName)
+        creature: dict = self.creatureHandler.addCreature(creatureName)
 
-    def handleServerCreatures(self, data):
-        self.creatureList.grid_forget()
-        self.creatureList = ttk.Frame(self)
-        self.creatureList.grid(column=0, row=0)
+        creatureWindow = CreatureWindow(creature, None, master = self.creatureNoteBook)
 
-        for creature in data:
-            CreatureWindow(creature, None, master = self.creatureList).pack()
+        self.creatureNoteBook.add(creatureWindow, text=creature["name"])
