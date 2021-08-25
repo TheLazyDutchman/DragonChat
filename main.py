@@ -9,7 +9,7 @@ from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
 
-serverIp = "212.187.9.198"
+serverIp = "62.163.205.59"
 
 imgSendPort = 5555
 imgRecvPort = 5556
@@ -25,15 +25,26 @@ camera = VideoStream().start()
 with ClientConnection.Connections(userName, "group", serverIp) as server:
     server.initialize_text_data(textSendPort, textRecvPort)
 
+    print("initialized server text connection")
+
+    print("initializing group handler")
     group = groupHandler(userName, server.textSender)
     status, groupName = group.createGroup("group", '')
+    print("initialized group handler")
 
+    print("initializing creature handler")
     creatures = CreatureHandler(groupName, userName, server.textSender)
+    print("initialized creature handler")
 
+    print("initializing chat handler")
     chat = chatHandler(groupName, userName, server.textSender)
+    print("initialized chat handler")
 
+    print("initializing initiative handler")
     initiative = InitiativeHandler(groupName, userName, server.textSender)
+    print("initialized initiative handler")
 
+    print("added handlers")
     handlers = {
         "group" : group,
         "creatures" : creatures,
@@ -43,12 +54,16 @@ with ClientConnection.Connections(userName, "group", serverIp) as server:
 
     main = window.main(socket.gethostname(), "D&D messaging", server, handlers)
 
+    print("created window")
+
     eventListener = EventHandler(groupName, userName, server.textSender)
     eventListener.addListener("Message", main.handleMsg)
     eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
     eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
     eventListener.addListener("Creatures", main.creaturesWindow.handleServerCreatures)
+    print("added event listeners")
 
     server.start_textLoop(eventListener.HandleEvent)
 
+    print("starting main loop")
     main.start()

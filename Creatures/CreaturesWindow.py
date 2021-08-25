@@ -1,3 +1,4 @@
+from Creatures.CreatureWindow import CreatureWindow
 from Creatures.CreatureHandler import CreatureHandler
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -14,7 +15,7 @@ class CreaturesWindow(ttk.Frame):
         self.creatureList.grid(column=0, row=0)
 
         self.monsterList = dndApi.searchMonster('')['results']
-        self.monsterList : list[tuple[str, str]] = [(x['name'], x['url']) for x in self.monsterList]
+        self.monsterList : list[tuple[str, str]] = [(x['name'], x['index']) for x in self.monsterList]
 
         self.drawInputUI()
 
@@ -33,7 +34,7 @@ class CreaturesWindow(ttk.Frame):
 
         ttk.Button(master=addCreatureInput, 
             text="Add Creature", 
-            command=lambda: self.createCreature(name.get())).pack()
+            command=lambda: self.createCreature([monster[1] for monster in monsterValues if monster[0] == name.get()][0])).pack()
 
         def showMonsterOptions(*args):
             data = searchName.get().lower()
@@ -47,14 +48,12 @@ class CreaturesWindow(ttk.Frame):
         searchName.trace('w', showMonsterOptions)
             
     def createCreature(self, creatureName):
-        monsterData = dndApi.getInfo([x[1] for x in self.monsterList if x[0] == creatureName][0])
-        self.creatureHandler.addCreature(monsterData)
+        self.creatureHandler.addCreature(creatureName)
 
     def handleServerCreatures(self, data):
         self.creatureList.grid_forget()
         self.creatureList = ttk.Frame(self)
         self.creatureList.grid(column=0, row=0)
 
-        for controller, creature in data:
-            ttk.Label(master=self.creatureList, 
-                text=f"{creature}: {controller}").pack()
+        for creature in data:
+            CreatureWindow(creature, None, master = self.creatureList).pack()
