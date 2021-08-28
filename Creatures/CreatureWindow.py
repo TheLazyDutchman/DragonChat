@@ -1,5 +1,5 @@
+from Creatures.CreatureHandler import CreatureHandler
 from Creatures.Actions.ActionWindow import ActionWindow
-from Initiative.InitiativeHandler import InitiativeHandler
 import tkinter.ttk as ttk
 from Creatures.Actions.Action import ActionFactory
 from ScrollableFrame import ScrollableFrame
@@ -7,10 +7,11 @@ from ScrollableFrame import ScrollableFrame
 class CreatureWindow(ttk.Frame):
     actionFactory = ActionFactory()
 
-    def __init__(self, creature: dict, initiativeHandler: InitiativeHandler, master = None, *args, **kwargs):
+    def __init__(self, creature: dict, creatureHandler: CreatureHandler, master = None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
-        self.initiativeHandler = initiativeHandler
+        self.creature = creature
+        self.creatureHandler = creatureHandler
         ttk.Label(master=self, text=creature['name']).pack()
 
 
@@ -20,9 +21,11 @@ class CreatureWindow(ttk.Frame):
 
         dataNoteBook.add(actionsWindow, text="actions")
         dataNoteBook.pack()
-        for action in creature["actions"]:
+        for action in self.creature["actions"]:
             actionFrame = ActionWindow(
-                self.actionFactory.Create(action), 
+                self.actionFactory.Create(action),
+                self.creature['creatureId'],
+                self.creatureHandler,
                 master = actionsWindow.scrollable_frame)
             actionFrame.pack()
             actionsWindow.bind(actionFrame)
