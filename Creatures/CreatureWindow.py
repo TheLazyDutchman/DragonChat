@@ -19,9 +19,10 @@ class CreatureWindow(ttk.Frame):
         actionsWindow = ScrollableFrame(dataNoteBook)
 
         dataNoteBook.add(actionsWindow, text="actions")
-
         dataNoteBook.pack()
         for action in creature["actions"]:
-            actionFrame = ActionWindow(self.actionFactory.Create(action), master = actionsWindow)
+            actionFrame = ActionWindow(
+                self.actionFactory.Create(action), 
+                master = actionsWindow.scrollable_frame)
             actionFrame.pack()
             actionsWindow.bind(actionFrame)
