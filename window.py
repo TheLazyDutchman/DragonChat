@@ -1,3 +1,5 @@
+from Creatures.CreaturesWindow import CreaturesWindow
+from Initiative.InitiativeWindow import InitiativeWindow
 import tkinter as tk
 import tkinter.ttk as ttk
 from cv2 import cv2
@@ -83,7 +85,6 @@ class textWindow(ttk.Frame):
 
         self.chat = chatWindow(self.main, self, handlers["chat"])
         self.rules = rulesWindow(self)
-        self.initiative = initiativeWindow(self.main, self, handlers["creatures"])
 
     def addChatCommand(self, name, callBack):
         self.commands.append(userCommands.Command(name, callBack))
@@ -99,6 +100,12 @@ class main(tk.Tk):
 
         # self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, handlers)
+        self.creaturesWindow = CreaturesWindow(handlers["creatures"], self)
+        self.creaturesWindow.grid(column=2, row=0)
+
+        self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
+        self.initiativeWindow.grid(column=2, row=1)
+
 
         # self.addChatCommand("rule", self.text.rules.displayRule)
 
@@ -134,11 +141,3 @@ class main(tk.Tk):
 
     def displayRule(self, rule):
         self.text.rules.displayRule(rule)
-
-    # initiative window funtions--------------------------------
-
-    def handleInitiative(self, data):
-        self.text.initiative.ShowInitiative(data)
-
-    def appendInitiativeChanges(self, initiative, curCreature):
-        self.text.initiative.appendChanges(initiative, curCreature)

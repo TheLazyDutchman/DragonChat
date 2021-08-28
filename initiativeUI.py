@@ -1,3 +1,4 @@
+import pickle
 import tkinter as tk
 import tkinter.ttk as ttk
 import random
@@ -19,29 +20,6 @@ class initiativeWindow(ttk.Frame):
         self.addCreaturesFrame = self.showAddMonstersUI()
 
         self.grid(row=0, column=1, rowspan=2)
-
-    def showAddCreaturesUI(self):
-        frame = ttk.Frame(self)
-
-        ttk.Label(frame, text="name").pack()
-        creatureName = tk.StringVar()
-        ttk.Entry(frame, textvariable=creatureName).pack()
-
-        ttk.Label(frame, text="modifier").pack()
-        dexModifier = tk.IntVar()
-        ttk.Entry(frame, textvariable=dexModifier).pack()
-
-        ttk.Label(frame, text="number").pack()
-        numCreatures = tk.IntVar()
-        ttk.Entry(frame, textvariable=numCreatures).pack()
-
-        ttk.Button(frame, text="add creatures", command=lambda : 
-            self.AddCreatures(creatureName.get(), numCreatures.get(), dexModifier.get())).pack()
-
-        ttk.Button(frame, text="start initiative", command=self.start).pack()
-
-        frame.grid(column=1, row=0)
-        return frame
 
     def showAddMonstersUI(self):
         monsters = searchMonster('')['results']
@@ -92,17 +70,23 @@ class initiativeWindow(ttk.Frame):
         return frame
 
     def start(self):
-        self.curCreature = self.initiative[0]
-        self.started = True
+        data = pickle.dumps((self.creatureHandler.groupName))
+        self.creatureHandler.sendSocket.send_multipart((b"StartInitiative", data))
+        self.creatureHandler.sendSocket.recv()
+
         self.addCreaturesFrame.grid_remove()
         self.addCreaturesFrame = self.showInInitiativeUI()
-        self.sendChanges()
 
     def end(self):
         self.initiative = list()
         self.started = False
         self.addCreaturesFrame.grid_remove()
         self.addCreaturesFrame = self.showAddMonstersUI()
+
+    def nextTurn(self):
+        data = pickle.dumps((self.creatureHandler.groupName))
+        self.creatureHandler.sendSocket.send_multipart((b"NextTurn", data))
+        self.creatureHandler.sendSocket.recv()
 
     def hasCreatures(self):
         return len(self.initiative) > 0
@@ -118,7 +102,7 @@ class initiativeWindow(ttk.Frame):
         self.listFrame.grid_remove()
         self.listFrame = ttk.Frame(self)
 
-        for userName, creature in initiativeList:
-            ttk.Label(self.listFrame, text=f"{creature}: {userName}").pack()
+        for userName, creature, initiative in initiativeList:
+            ttk.Label(self.listFrame, text=f"{creature}: {userName}: {initiative}").pack()
 
         self.listFrame.grid(column=0, row=0)
