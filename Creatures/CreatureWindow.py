@@ -5,7 +5,6 @@ from Creatures.Actions.Action import ActionFactory
 from ScrollableFrame import ScrollableFrame
 
 class CreatureWindow(ttk.Frame):
-    actionFactory = ActionFactory()
 
     def __init__(self, creature: dict, creatureHandler: CreatureHandler, master = None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
@@ -23,7 +22,7 @@ class CreatureWindow(ttk.Frame):
         dataNoteBook.pack()
         for action in self.creature["actions"]:
             actionFrame = ActionWindow(
-                self.actionFactory.Create(action),
+                action,
                 self.creature['creatureId'],
                 self.creatureHandler,
                 master = actionsWindow.scrollable_frame)
