@@ -50,6 +50,6 @@ class CreaturesWindow(ttk.Frame):
     def createCreature(self, creatureName):
         creature: dict = self.creatureHandler.addCreature(creatureName)
 
-        creatureWindow = CreatureWindow(creature, None, master = self.creatureNoteBook)
+        creatureWindow = CreatureWindow(creature, self.creatureHandler, master = self.creatureNoteBook)
 
         self.creatureNoteBook.add(creatureWindow, text=creature["name"])

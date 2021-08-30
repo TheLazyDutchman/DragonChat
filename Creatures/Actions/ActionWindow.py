@@ -1,14 +1,17 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from Creatures.CreatureHandler import CreatureHandler
 from Creatures.Actions.Action import Action, Attack, Multiattack, SaveAttack, dc
 
 
 
 class ActionWindow(ttk.Frame):
 
-    def __init__(self, action: Action, master = None, *args, **kwargs):
+    def __init__(self, action: Action, creatureId: int, creatureHandler: CreatureHandler, master = None, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
         self.action = action
+        self.creatureId = creatureId
+        self.creatureHandler = creatureHandler
 
         ttk.Label(master = self, text = self.action.name).pack()
 
@@ -32,6 +35,11 @@ class ActionWindow(ttk.Frame):
 
         if type(self.action) == SaveAttack:
             showSaveAttackData(self, self.action)
+
+        ttk.Button(master = self, text = "Use", command = self.Use).pack()
+
+    def Use(self):
+        self.creatureHandler.UseAction(self.creatureId, self.action)
 
 
 def showMultiAttackData(window: ActionWindow, data: Multiattack) -> None:
