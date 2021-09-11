@@ -2,7 +2,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Groups.groupHandler import groupHandler
-from Creatures.CreatureHandler import CreatureHandler
+from Creatures.creatureHandler import CreatureHandler
 from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
