@@ -93,7 +93,7 @@ class textWindow(ttk.Frame):
 
 class main(tk.Tk):
 
-    def __init__(self, name, title, server, handlers, *args, **kwargs):
+    def __init__(self, name, title, handlers, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.wm_title(title)

@@ -3,8 +3,8 @@ from ServerHandler.Handler import Handler
 
 class EventHandler(Handler):
 
-    def __init__(self, groupName: str, userName: str, sendSocket):
-        super().__init__(groupName, userName, sendSocket)
+    def __init__(self, groupName: str, userName: str, connection):
+        super().__init__(groupName, userName, connection)
         self.listeners: dict[str, Callable] = {}
 
     def addListener(self, eventType: str, callback: Callable):
@@ -13,7 +13,8 @@ class EventHandler(Handler):
 
         self.listeners[eventType] = callback
 
-    def HandleEvent(self, eventType, data):
+    def HandleEvent(self, target, eventData):
+        eventType, data = eventData
         if not eventType in self.listeners:
             return "there is no listener for event " + eventType
 

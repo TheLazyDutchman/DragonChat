@@ -2,12 +2,12 @@ from ServerHandler.Handler import Handler
 
 class groupHandler(Handler):
 
-    def __init__(self, userName, sendSocket):
-        super().__init__('', userName, sendSocket)
+    def __init__(self, userName, connection):
+        super().__init__('', userName, connection)
 
     def createGroup(self, groupName, password):
         data = (groupName, password, self.userName)
-        answer = self.SendServerMessage("createGroup", data)
+        answer = self.connection.SendRequest("createGroup", data)
 
         if answer[0] != "OK":
             if answer[0] == "group already exists":
@@ -17,15 +17,9 @@ class groupHandler(Handler):
 
         return True, groupName
 
-    def getGroups(self) -> list[str]:
-        self.sendSocket.send_multipart((b"getGroups", None))
-
-        groups = self.sendSocket.recv()
-        return groups
-
     def joinGroup(self, groupName, password):
         data = (groupName, password, self.userName)
-        answer = self.SendServerMessage("joinGroup", data)
+        answer = self.connection.SendRequest("joinGroup", data)
 
         if answer[0] != "OK":
             return False, answer

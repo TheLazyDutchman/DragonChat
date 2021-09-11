@@ -1,75 +1,71 @@
-import ClientConnection
-from imutils.video import VideoStream
 import socket
 import window
 from Chat.chatHandler import chatHandler
 from Groups.groupHandler import groupHandler
 from Creatures.CreatureHandler import CreatureHandler
-from Creatures.Dice.RollHandler import RollHandler
 from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
 
-serverIp = "62.163.205.59"
+from pyzmqServer.client import Client
 
-imgSendPort = 5555
-imgRecvPort = 5556
-textSendPort = 5557
-textRecvPort = 5558
-soundSendPort = 5559
-soundRecvPort = 5560
+serverIp = "192.168.1.71"
+
+eventPort = 5558
+requestSendPort = 5557
+requestRecievePort = 5558
 
 userName = "testUser"
 
-camera = VideoStream().start()
+connection = Client(serverIp, eventPort, requestSendPort, requestRecievePort)
+print("initialized server text connection")
 
-with ClientConnection.Connections(userName, "group", serverIp) as server:
-    server.initialize_text_data(textSendPort, textRecvPort)
 
-    print("initialized server text connection")
 
-    print("initializing group handler")
-    group = groupHandler(userName, server.textSender)
-    status, groupName = group.createGroup("group", '')
-    print("initialized group handler")
+print("initializing group handler")
+group = groupHandler(userName, connection)
+status, groupName = group.createGroup("group", '')
+print("initialized group handler")
 
-    print("initializing creature handler")
-    creatures = CreatureHandler(groupName, userName, server.textSender)
-    print("initialized creature handler")
+connection.Subscribe(groupName.encode('utf-8'))
+connection.Subscribe(userName.encode('utf-8'))
 
-    print("initializing chat handler")
-    chat = chatHandler(groupName, userName, server.textSender)
-    print("initialized chat handler")
+print("initializing creature handler")
+creatures = CreatureHandler(groupName, userName, connection)
+print("initialized creature handler")
 
-    print("initializing initiative handler")
-    initiative = InitiativeHandler(groupName, userName, server.textSender)
-    print("initialized initiative handler")
-    
-    print("initializing roll handler")
-    rolls = RollHandler(groupName, userName, server.textSender)
-    print("initialized roll handler")
+print("initializing chat handler")
+chat = chatHandler(groupName, userName, connection)
+print("initialized chat handler")
 
-    print("added handlers")
-    handlers = {
-        "group" : group,
-        "creatures" : creatures,
-        "chat" : chat,
-        "initiative" : initiative,
-        "rolls" : rolls
-    }
+print("initializing initiative handler")
+initiative = InitiativeHandler(groupName, userName, connection)
+print("initialized initiative handler")
 
-    main = window.main(socket.gethostname(), "D&D messaging", server, handlers)
+# print("initializing roll handler")
+# rolls = RollHandler(groupName, userName, connection)
+# print("initialized roll handler")
 
-    print("created window")
+print("added handlers")
+handlers = {
+    "group" : group,
+    "creatures" : creatures,
+    "chat" : chat,
+    "initiative" : initiative
+}
 
-    eventListener = EventHandler(groupName, userName, server.textSender)
-    eventListener.addListener("Message", main.handleMsg)
-    eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
-    eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
-    eventListener.addListener("Make Roll", rolls.makeRoll)
-    print("added event listeners")
+main = window.main(socket.gethostname(), "D&D messaging", handlers)
 
-    server.start_textLoop(eventListener.HandleEvent)
+print("created window")
 
-    print("starting main loop")
-    main.start()
+eventListener = EventHandler(groupName, userName, connection)
+eventListener.addListener("Message", main.handleMsg)
+eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
+eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
+# eventListener.addListener("Make Roll", rolls.makeRoll)
+print("added event listeners")
+
+connection.SetEventCallback(eventListener.HandleEvent)
+
+print("starting main loop")
+main.start()
