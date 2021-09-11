@@ -5,9 +5,9 @@ class InitiativeHandler(Handler):
     def StartInitiative(self):
         data = self.groupName
 
-        answer = self.SendServerMessage("StartInitiative", data)
+        answer = self.connection.SendRequest("StartInitiative", data)
 
     def NextTurn(self):
         data = self.groupName
 
-        answer = self.SendServerMessage("NextTurn", data)
+        answer = self.connection.SendRequest("NextTurn", data)

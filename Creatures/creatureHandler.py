@@ -6,7 +6,7 @@ class CreatureHandler(Handler):
         data = (self.groupName, self.userName, creatureType)
         print("Adding creature", creatureType)
 
-        answer = self.SendServerMessage("addCreature", data)
+        answer = self.connection.SendRequest("addCreature", data)
 
         return answer[0]
 
@@ -14,6 +14,6 @@ class CreatureHandler(Handler):
         data = (self.groupName, self.userName, creatureId, action)
         print("Using action", action.name)
 
-        answer = self.SendServerMessage("useAction", data)
+        answer = self.connection.SendRequest("useAction", data)
 
         return answer[0]
