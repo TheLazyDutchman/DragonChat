@@ -10,6 +10,7 @@ from Initiative.InitiativeHandler import InitiativeHandler
 from pyzmqServer.client import Client
 
 serverIp = "192.168.1.71"
+clientIp = "192.168.1.71"
 
 eventPort = 5558
 requestSendPort = 5557
@@ -17,7 +18,7 @@ requestRecievePort = 5558
 
 userName = "testUser"
 
-connection = Client(serverIp, eventPort, requestSendPort, requestRecievePort)
+connection = Client(clientIp, serverIp, eventPort, requestSendPort, requestRecievePort)
 print("initialized server text connection")
 
 
