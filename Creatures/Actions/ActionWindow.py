@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from Creatures.CreatureHandler import CreatureHandler
+from Creatures.creatureHandler import CreatureHandler
 from Creatures.Actions.Action import Action, Attack, Multiattack, SaveAttack, dc
 
 
