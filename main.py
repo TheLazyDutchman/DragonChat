@@ -1,7 +1,6 @@
 import socket
 import window
 from Chat.chatHandler import chatHandler
-from Groups.groupHandler import groupHandler
 from Creatures.creatureHandler import CreatureHandler
 from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
@@ -14,19 +13,14 @@ clientIp = "192.168.1.71"
 
 eventPort = 5558
 requestSendPort = 5557
-requestRecievePort = 5558
+requestRecievePort = 5556
 
-userName = "testUser"
+groupName = "main"
+userName = "client"
 
 connection = Client(clientIp, serverIp, eventPort, requestSendPort, requestRecievePort)
 print("initialized server text connection")
 
-
-
-print("initializing group handler")
-group = groupHandler(userName, connection)
-status, groupName = group.createGroup("group", '')
-print("initialized group handler")
 
 connection.Subscribe(groupName.encode('utf-8'))
 connection.Subscribe(userName.encode('utf-8'))
@@ -49,7 +43,6 @@ print("initialized initiative handler")
 
 print("added handlers")
 handlers = {
-    "group" : group,
     "creatures" : creatures,
     "chat" : chat,
     "initiative" : initiative
