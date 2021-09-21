@@ -1,4 +1,4 @@
-from Creatures.CreatureHandler import CreatureHandler
+from Creatures.creatureHandler import CreatureHandler
 from Creatures.Actions.ActionWindow import ActionWindow
 import tkinter.ttk as ttk
 from Creatures.Actions.Action import ActionFactory

@@ -1,5 +1,5 @@
 from Creatures.CreatureWindow import CreatureWindow
-from Creatures.CreatureHandler import CreatureHandler
+from Creatures.creatureHandler import CreatureHandler
 import tkinter as tk
 import tkinter.ttk as ttk
 import dndApi
