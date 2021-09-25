@@ -11,9 +11,9 @@ class CreatureHandler(Handler):
         return answer
 
     def UseAction(self, creatureId: int, action: Action):
-        data = (self.groupName, self.userName, creatureId, action)
+        data = (self.groupName, self.userName, creatureId, action.name)
         print("Using action", action.name)
 
-        answer = self.connection.SendRequest("useAction", data)
+        answer = self.connection.SendRequest("use action", data)
 
         return answer

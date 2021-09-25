@@ -2,6 +2,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Creatures.creatureHandler import CreatureHandler
+from Creatures.Dice.RollHandler import RollHandler
 from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
@@ -37,9 +38,9 @@ print("initializing initiative handler")
 initiative = InitiativeHandler(groupName, userName, connection)
 print("initialized initiative handler")
 
-# print("initializing roll handler")
-# rolls = RollHandler(groupName, userName, connection)
-# print("initialized roll handler")
+print("initializing roll handler")
+rolls = RollHandler(groupName, userName, connection)
+print("initialized roll handler")
 
 print("added handlers")
 handlers = {
