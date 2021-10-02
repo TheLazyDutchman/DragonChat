@@ -48,8 +48,8 @@ class CreaturesWindow(ttk.Frame):
         searchName.trace('w', showMonsterOptions)
             
     def createCreature(self, creatureName):
-        creature: dict = self.creatureHandler.addCreature(creatureName)
+        creature = self.creatureHandler.addCreature(creatureName)
 
         creatureWindow = CreatureWindow(creature, self.creatureHandler, master = self.creatureNoteBook)
 
-        self.creatureNoteBook.add(creatureWindow, text=creature["name"])
+        self.creatureNoteBook.add(creatureWindow, text=creature.name)
