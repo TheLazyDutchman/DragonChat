@@ -2,7 +2,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Creatures.creatureHandler import CreatureHandler
-from Creatures.Dice.RollHandler import RollHandler
+from dice.diceHandler import DiceHandler
 from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
@@ -38,7 +38,7 @@ initiative = InitiativeHandler(groupName, userName, connection)
 print("initialized initiative handler")
 
 print("initializing roll handler")
-rolls = RollHandler(groupName, userName, connection)
+rolls = DiceHandler(groupName, userName, connection)
 print("initialized roll handler")
 
 print("added handlers")
@@ -50,13 +50,17 @@ handlers = {
 
 main = window.main(socket.gethostname(), "D&D messaging", handlers)
 
+rolls.setMaster(main)
+
 print("created window")
 
 eventListener = EventHandler(groupName, userName, connection)
 eventListener.addListener("Message", main.handleMsg)
-eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
-eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
-# eventListener.addListener("Make Roll", rolls.makeRoll)
+# eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
+# eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
+
+connection.AddRequestListener("make roll", rolls.handleRoll)
+
 print("added event listeners")
 
 connection.SetEventCallback(eventListener.HandleEvent)

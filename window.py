@@ -84,7 +84,7 @@ class textWindow(ttk.Frame):
         self.grid(row=0, column=1)
 
         self.chat = chatWindow(self.main, self, handlers["chat"])
-        self.rules = rulesWindow(self)
+        # self.rules = rulesWindow(self)
 
     def addChatCommand(self, name, callBack):
         self.commands.append(userCommands.Command(name, callBack))
@@ -103,8 +103,8 @@ class main(tk.Tk):
         self.creaturesWindow = CreaturesWindow(handlers["creatures"], self)
         self.creaturesWindow.grid(column=2, row=0)
 
-        self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
-        self.initiativeWindow.grid(column=2, row=1)
+        # self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
+        # self.initiativeWindow.grid(column=2, row=1)
 
 
         # self.addChatCommand("rule", self.text.rules.displayRule)
