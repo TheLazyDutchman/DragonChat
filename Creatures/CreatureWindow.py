@@ -28,7 +28,7 @@ class CreatureWindow(ttk.Frame):
         for action in self.creature.actions:
             actionFrame = ActionWindow(
                 action,
-                id(self.creature),
+                self.creature.id,
                 self.creatureHandler,
                 master = actionsWindow.scrollable_frame)
             actionFrame.pack()
