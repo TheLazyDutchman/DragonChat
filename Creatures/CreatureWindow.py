@@ -14,6 +14,9 @@ class CreatureWindow(ttk.Frame):
 
         self.creature = creature
         self.creatureHandler = creatureHandler
+
+        print(self.creature)
+        
         ttk.Label(master=self, text=creature.name).pack()
 
 
