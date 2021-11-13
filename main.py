@@ -3,7 +3,6 @@ import window
 from Chat.chatHandler import chatHandler
 from Creatures.creatureHandler import CreatureHandler
 from dice.diceHandler import DiceHandler
-from ServerHandler.EventHandler import EventHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
 
@@ -54,16 +53,16 @@ rolls.setMaster(main)
 
 print("created window")
 
-eventListener = EventHandler(groupName, userName, connection)
-eventListener.addListener("Message", main.handleMsg)
-# eventListener.addListener("Initiative", main.initiativeWindow.handleInitiativeUpdate)
-# eventListener.addListener("Start turn", main.initiativeWindow.handleStartTurn)
+connection.addEventType("message")
+connection.setEventHandler("message", main.handleMsg)
 
-connection.AddRequestListener("make roll", rolls.handleRoll)
+connection.setRequestHandler("show creature", main.creaturesWindow.showCreature)
+
+connection.createTkinterRequestLoop("UI loop", main)
+connection.addRequestType("make roll")
+connection.setRequestHandler("make roll", rolls.handleRoll, "UI loop")
 
 print("added event listeners")
-
-connection.SetEventCallback(eventListener.HandleEvent)
 
 print("starting main loop")
 main.start()

@@ -1,3 +1,5 @@
+from DandData.creature import Creature
+
 from Creatures.CreatureWindow import CreatureWindow
 from Creatures.creatureHandler import CreatureHandler
 import tkinter as tk
@@ -48,8 +50,9 @@ class CreaturesWindow(ttk.Frame):
         searchName.trace('w', showMonsterOptions)
             
     def createCreature(self, creatureName):
-        creature = self.creatureHandler.addCreature(creatureName)
+        self.creatureHandler.addCreature(creatureName)
 
+    def showCreature(self, creature: Creature):
         creatureWindow = CreatureWindow(creature, self.creatureHandler, master = self.creatureNoteBook)
 
         self.creatureNoteBook.add(creatureWindow, text=creature.name)
