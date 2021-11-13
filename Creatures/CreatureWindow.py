@@ -15,16 +15,12 @@ class CreatureWindow(ttk.Frame):
         self.creature = creature
         self.creatureHandler = creatureHandler
 
-        print(self.creature)
-        
         ttk.Label(master=self, text=creature.name).pack()
 
 
         dataNoteBook = ttk.Notebook(master = self)
 
         actionsWindow = ScrollableFrame(dataNoteBook)
-
-        print(self.creature)
 
         dataNoteBook.add(actionsWindow, text="actions")
         dataNoteBook.pack()
