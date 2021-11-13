@@ -58,8 +58,9 @@ connection.setEventHandler("message", main.handleMsg)
 
 connection.setRequestHandler("show creature", main.creaturesWindow.showCreature)
 
-# connection.addRequestType("make roll")
-# connection.setRequestHandler("make roll", rolls.handleRoll, main.after, 0)
+connection.createTkinterRequestLoop("UI loop", main)
+connection.addRequestType("make roll")
+connection.setRequestHandler("make roll", rolls.handleRoll, "UI loop")
 
 print("added event listeners")
 
