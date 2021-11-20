@@ -12,13 +12,16 @@ class DiceHandler(Handler):
     def setMaster(self, master):
         self.master = master
     
-    def handleRoll(self, rolls: tuple[tuple[str, Roll], ...]):
-        answer = []
+    def handleRoll(self, rolls: dict[str, Roll]):
+        result: dict[str, int] = {}
+
+        def addResult(name: str, value: int) -> None:
+            result[name] = value
+
+            print(result)
 
         window = tk.Toplevel(master=self.master)
         window.title("Roll dice")
-        for name, roll in rolls:
-            
-            DiceFrame(window, name, roll).pack()
 
-        return answer
+        for name, roll in rolls.items():
+            DiceFrame(window, name, roll, addResult).pack()

@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from typing import Callable
 
 from DandData.dice import Roll
 
@@ -7,11 +8,12 @@ from DandData.dice import Roll
 
 class DiceFrame(ttk.Frame):
 
-    def __init__(self, master, name: str, roll: Roll) -> None:
+    def __init__(self, master, name: str, roll: Roll, returnFunction: Callable[[str, int], None]) -> None:
         super().__init__(master)
         self.roll = roll
         self.name = name
         self.input = tk.IntVar()
+        self.returnFunction = returnFunction
 
         ttk.Label(self, text = self.name).pack()
         ttk.Label(self, text = self.roll).pack()
@@ -29,4 +31,4 @@ class DiceFrame(ttk.Frame):
             print(f"{self.roll} can not roll higher than {self.roll.getMaxRoll()}")
             return
 
-        print(self.input.get())
+        self.returnFunction(self.name, amount)
