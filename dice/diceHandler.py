@@ -15,13 +15,21 @@ class DiceHandler(Handler):
     def handleRoll(self, rolls: dict[str, Roll]):
         result: dict[str, int] = {}
 
-        def addResult(name: str, value: int) -> None:
-            result[name] = value
-
-            print(result)
-
         window = tk.Toplevel(master=self.master)
         window.title("Roll dice")
 
+        frames: dict[str, DiceFrame] = {}
+
+        def addResult(name: str, value: int) -> None:
+            result[name] = value
+            frames[name].pack_forget()
+
+            print(result)
+            if len(result) == len(frames):
+                print("we can send it now")
+
+                window.destroy()
+
         for name, roll in rolls.items():
-            DiceFrame(window, name, roll, addResult).pack()
+            frames[name] = DiceFrame(window, name, roll, addResult)
+            frames[name].pack()
