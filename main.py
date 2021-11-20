@@ -2,7 +2,7 @@ import socket
 import window
 from Chat.chatHandler import chatHandler
 from Creatures.creatureHandler import CreatureHandler
-from dice.diceHandler import DiceHandler
+from Dice.diceHandler import DiceHandler
 from Initiative.InitiativeHandler import InitiativeHandler
 
 
