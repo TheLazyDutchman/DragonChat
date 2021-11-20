@@ -1,7 +1,9 @@
+import tkinter as tk
+
 from ServerHandler.Handler import Handler
 from DandData.dice import Roll
 
-import tkinter as tk
+from .diceFrame import DiceFrame
 
 
 
@@ -16,6 +18,7 @@ class DiceHandler(Handler):
         window = tk.Toplevel(master=self.master)
         window.title("Roll dice")
         for roll in rolls:
-            answer.append(roll.amount * int(roll.dice_type) + roll.bonus)
+            
+            DiceFrame(window, roll).pack()
 
         return answer
