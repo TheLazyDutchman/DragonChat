@@ -7,11 +7,13 @@ from DandData.dice import Roll
 
 class DiceFrame(ttk.Frame):
 
-    def __init__(self, master, roll: Roll) -> None:
+    def __init__(self, master, name: str, roll: Roll) -> None:
         super().__init__(master)
         self.roll = roll
+        self.name = name
         self.input = tk.IntVar()
 
+        ttk.Label(self, text = self.name).pack()
         ttk.Label(self, text = self.roll).pack()
 
         ttk.Entry(self, textvariable = self.input).pack()
