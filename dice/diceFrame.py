@@ -18,4 +18,13 @@ class DiceFrame(ttk.Frame):
         ttk.Button(self, text = "Apply input", command = self.applyInput).pack()
 
     def applyInput(self):
+        amount = self.input.get()
+
+        if (amount < self.roll.getMinRoll()):
+            print(f"{self.roll} can not roll lower than {self.roll.getMinRoll()}")
+            return
+        if (amount > self.roll.getMaxRoll()):
+            print(f"{self.roll} can not roll higher than {self.roll.getMaxRoll()}")
+            return
+
         print(self.input.get())
