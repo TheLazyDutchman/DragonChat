@@ -12,7 +12,7 @@ class DiceHandler(Handler):
     def setMaster(self, master):
         self.master = master
     
-    def handleRoll(self, rolls: dict[str, Roll]):
+    def handleRoll(self, rollName: str, rolls: dict[str, Roll]):
         result: dict[str, int] = {}
 
         window = tk.Toplevel(master=self.master)
@@ -26,7 +26,12 @@ class DiceHandler(Handler):
 
             print(result)
             if len(result) == len(frames):
-                print("we can send it now")
+                
+                data = (self.groupName, self.userName, rollName, result)
+                answer = self.connection.SendRequest("dice result", data)
+
+                if answer[0] == False:
+                    print("could not return dice result: '", answer[1], "'")
 
                 window.destroy()
 
