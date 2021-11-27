@@ -1,7 +1,7 @@
 from DandData.creature import Creature
 from pyzmqServer.client import Client
 
-from Creatures.Actions.Action import Action
+from DandData.action import Action
 from ServerHandler.Handler import Handler
 
 
