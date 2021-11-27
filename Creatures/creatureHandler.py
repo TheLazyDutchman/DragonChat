@@ -13,7 +13,7 @@ class CreatureHandler(Handler):
 
         connection.addRequestType("show creature")
 
-    def addCreature(self, creatureType: str):
+    def addCreature(self, creatureType: str) -> None:
         data = (self.groupName, self.userName, creatureType)
         print("Adding creature", creatureType)
 
@@ -22,10 +22,11 @@ class CreatureHandler(Handler):
         if answer[0] == False:
             print("could not create creature: '", answer[1], "'")
 
-    def UseAction(self, creatureId: int, action: Action) -> Creature:
+    def UseAction(self, creatureId: int, action: Action) -> None:
         data = (self.groupName, self.userName, creatureId, action.name)
         print("Using action", action.name)
 
-        answer: Creature = self.connection.SendRequest("use action", data)
+        answer = self.connection.SendRequest("use action", data)
 
-        return answer
+        if answer[0] == False:
+            print("could not use action: '", answer[1], "'")
