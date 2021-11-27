@@ -1,4 +1,4 @@
-from DandData.action import Action
+from DandData.action import Action, Attack, MultiAttack
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -28,11 +28,11 @@ class ActionWindow(ttk.Frame):
                 ttk.Label(master = self, 
                     text = f"dice: {dmg.dice}\n").pack()
 
-        # if type(self.action) == Multiattack:
-        #     showMultiAttackData(self, self.action)
+        if type(self.action) == MultiAttack:
+            showMultiAttackData(self, self.action)
 
-        # if type(self.action) == Attack:
-        #     showAttackData(self, self.action)
+        if type(self.action) == Attack:
+            showAttackData(self, self.action)
 
         # if type(self.action) == SaveAttack:
         #     showSaveAttackData(self, self.action)
@@ -43,22 +43,15 @@ class ActionWindow(ttk.Frame):
         self.creatureHandler.UseAction(self.creatureId, self.action)
 
 
-# def showMultiAttackData(window: ActionWindow, data: Multiattack) -> None:
-#     ttk.Label(master = window, text = str(data.num) + " from:")
+def showMultiAttackData(window: ActionWindow, data: MultiAttack) -> None:
+    for option in data.options:
+        ttk.Label(master = window, text = "name: " + option.name).pack()
+        ttk.Label(master = window, text = "count: " + str(option.count)).pack()
+        ttk.Label(master = window, text = "type: " + option.actionType + "\n").pack()
 
-#     for optionList in data.options:
-#         ttk.Label(master = window, 
-#             text = " + ".join([option.name for option in optionList]) + ": ").pack()
-#         for option in optionList:
-#             ttk.Label(master = window, text = "name: " + option.name).pack()
-#             ttk.Label(master = window, text = "count: " + str(option.count)).pack()
-#             ttk.Label(master = window, text = "type: " + option.type + "\n").pack()
-
-# def showAttackData(window: ActionWindow, data: Attack) -> None:
-#     ttk.Label(master = window, 
-#         text = "attack bonus: " + str(data.attack_bonus) + "\n").pack()
-#     if data.dc is not None:
-#         showDC(window, data.dc)
+def showAttackData(window: ActionWindow, data: Attack) -> None:
+    ttk.Label(master = window, 
+        text = "attack bonus: " + str(data.attack_bonus) + "\n").pack()
 
 # def showSaveAttackData(window: ActionWindow, data: SaveAttack) -> None:
 #     showDC(window, data.dc)
