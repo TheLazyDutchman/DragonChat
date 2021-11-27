@@ -1,4 +1,5 @@
 import tkinter as tk
+from uuid import UUID
 
 from ServerHandler.Handler import Handler
 from DandData.dice import Roll
@@ -12,11 +13,12 @@ class DiceHandler(Handler):
     def setMaster(self, master):
         self.master = master
     
-    def handleRoll(self, rollName: str, rolls: dict[str, Roll]):
+    def handleRoll(self, data: tuple[str, UUID, str, dict[str, Roll]]):
+        creatureName, creatureId, rollName, rolls = data
         result: dict[str, int] = {}
 
         window = tk.Toplevel(master=self.master)
-        window.title("Roll dice")
+        window.title(f"Roll dice for {creatureName}, {rollName}")
 
         frames: dict[str, DiceFrame] = {}
 
@@ -24,10 +26,9 @@ class DiceHandler(Handler):
             result[name] = value
             frames[name].pack_forget()
 
-            print(result)
             if len(result) == len(frames):
                 
-                data = (self.groupName, self.userName, rollName, result)
+                data = (self.groupName, self.userName, creatureId, rollName, result)
                 answer = self.connection.SendRequest("dice result", data)
 
                 if answer[0] == False:
