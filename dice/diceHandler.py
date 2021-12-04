@@ -1,5 +1,7 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from uuid import UUID
+import random
 
 from ServerHandler.Handler import Handler
 from DandData.dice import Roll
@@ -36,6 +38,14 @@ class DiceHandler(Handler):
 
                 window.destroy()
 
+        def rollRandom():
+            for name, roll in rolls.items():
+                value = random.randint(roll.getMinRoll(), roll.getMaxRoll())
+
+                addResult(name, value)
+
         for name, roll in rolls.items():
             frames[name] = DiceFrame(window, name, roll, addResult)
             frames[name].pack()
+
+        ttk.Button(window, text = "Roll Random", command = rollRandom).pack()
