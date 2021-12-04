@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from DandData.creature import Creature
 from pyzmqServer.client import Client
 
@@ -23,7 +25,9 @@ class CreatureHandler(Handler):
             print("could not create creature: '", answer[1], "'")
 
     def UseAction(self, creatureId: int, action: Action) -> None:
-        data = (self.groupName, self.userName, creatureId, action.name)
+        targets: list[tuple[str, UUID]] = [(self.userName, creatureId)] # target for now is self
+        
+        data = (self.groupName, self.userName, creatureId, action.name, targets)
         print("Using action", action.name)
 
         answer = self.connection.SendRequest("use action", data)
