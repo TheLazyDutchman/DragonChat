@@ -24,7 +24,7 @@ class ActionWindow(ttk.Frame):
         if len(self.action.damage) > 0:
             ttk.Label(master = self, text = "\nDamage:").pack()
             for dmg in self.action.damage:
-                ttk.Label(master = self, text = f"type: {dmg.dmgType}").pack()
+                ttk.Label(master = self, text = f"type: {dmg.dmgType.name}").pack()
                 ttk.Label(master = self, 
                     text = f"dice: {dmg.dice}\n").pack()
 
