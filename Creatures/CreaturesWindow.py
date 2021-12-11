@@ -54,5 +54,6 @@ class CreaturesWindow(ttk.Frame):
 
     def showCreature(self, creature: Creature):
         creatureWindow = CreatureWindow(creature, self.creatureHandler, master = self.creatureNoteBook)
+        creatureWindow.pack(fill = 'both', expand = True)
 
         self.creatureNoteBook.add(creatureWindow, text=creature.name)
