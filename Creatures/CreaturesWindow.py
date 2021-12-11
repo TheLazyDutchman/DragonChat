@@ -1,3 +1,4 @@
+from uuid import UUID
 from DandData.creature import Creature
 
 from Creatures.CreatureWindow import CreatureWindow
@@ -15,6 +16,8 @@ class CreaturesWindow(ttk.Frame):
 
         self.creatureNoteBook = ttk.Notebook(master = self)
         self.creatureNoteBook.grid(column=0, row=0)
+
+        self.creatureWindows: dict[UUID, CreatureWindow] = {}
 
         self.monsterList = dndApi.searchMonster('')['results']
         self.monsterList : list[tuple[str, str]] = [(x['name'], x['index']) for x in self.monsterList]
@@ -57,3 +60,8 @@ class CreaturesWindow(ttk.Frame):
         creatureWindow.pack(fill = 'both', expand = True)
 
         self.creatureNoteBook.add(creatureWindow, text=creature.name)
+
+        self.creatureWindows[creature.id] = creatureWindow
+
+        creature.health -= 10
+        self.creatureWindows[creature.id].updateHealth()

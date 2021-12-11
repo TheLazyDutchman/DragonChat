@@ -1,8 +1,10 @@
+import tkinter as tk
+import tkinter.ttk as ttk
+
 from DandData.creature import Creature
 
 from Creatures.creatureHandler import CreatureHandler
 from Creatures.Actions.ActionWindow import ActionWindow
-import tkinter.ttk as ttk
 from ScrollableFrame import ScrollableFrame
 
 
@@ -14,6 +16,8 @@ class CreatureWindow(ttk.Frame):
 
         self.creature = creature
         self.creatureHandler = creatureHandler
+
+        self.healthString = tk.StringVar(value = f"Health: {self.creature.health}/{self.creature.hitPoints}")
 
         ttk.Label(master=self, text=creature.name).pack()
 
@@ -30,7 +34,8 @@ class CreatureWindow(ttk.Frame):
 
         ttk.Label(statsWindow.scrollable_frame, text = f"Name: {self.creature.name}").pack()
         ttk.Label(statsWindow.scrollable_frame, text = f"AC: {self.creature.armorClass}").pack()
-        ttk.Label(statsWindow.scrollable_frame, text = f"Health: {self.creature.health}/{self.creature.hitPoints}").pack()
+
+        ttk.Label(statsWindow.scrollable_frame, textvariable = self.healthString).pack()
 
         self.dataNoteBook.add(statsWindow, text="stats")
     
@@ -48,3 +53,6 @@ class CreatureWindow(ttk.Frame):
             actionsWindow.bind(actionFrame)
 
         self.dataNoteBook.add(actionsWindow, text="actions")
+
+    def updateHealth(self) -> None:
+        self.healthString.set(value = f"Health: {self.creature.health}/{self.creature.hitPoints}")
