@@ -66,5 +66,12 @@ class CreaturesWindow(ttk.Frame):
 
         self.creatureWindows[creature.id] = creatureWindow
 
-        creature.health -= 10
-        self.creatureWindows[creature.id].updateHealth()
+    def updateHealth(self, event: tuple[UUID, int]):
+        creatureId, newHealth = event
+
+        if not creatureId in self.creatureWindows:
+            print("creature not found")
+            pass
+
+        self.creatureWindows[creatureId].creature = newHealth
+        self.creatureWindows[creatureId].updateHealth()
