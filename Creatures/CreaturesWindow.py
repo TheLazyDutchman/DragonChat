@@ -14,8 +14,14 @@ class CreaturesWindow(ttk.Frame):
         super().__init__(master, *args, **kwargs)
 
         self.creatureHandler = CreatureHandler(connection)
+
         connection.addRequestType('show creature')
         connection.setRequestHandler('show creature', self.showCreature)
+
+        connection.addRequestType('update health')
+        connection.setRequestHandler('update health', self.updateHealth)
+
+
 
         self.creatureNoteBook = ttk.Notebook(master = self)
         self.creatureNoteBook.grid(column=0, row=0)
@@ -73,5 +79,5 @@ class CreaturesWindow(ttk.Frame):
             print("creature not found")
             pass
 
-        self.creatureWindows[creatureId].creature = newHealth
+        self.creatureWindows[creatureId].creature.health = newHealth
         self.creatureWindows[creatureId].updateHealth()
