@@ -10,10 +10,8 @@ from ServerHandler.Handler import Handler
 
 class CreatureHandler(Handler):
 
-    def __init__(self, groupName: str, userName: str, connection: Client) -> None:
-        super().__init__(groupName, userName, connection)
-
-        connection.addRequestType("show creature")
+    def __init__(self, connection: Client) -> None:
+        super().__init__(connection.groupName, connection.clientName, connection)
 
     def addCreature(self, creatureType: str) -> None:
         data = (self.groupName, self.userName, creatureType)

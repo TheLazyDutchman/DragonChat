@@ -24,9 +24,6 @@ print("initialized server text connection")
 connection.Subscribe(groupName.encode('utf-8'))
 connection.Subscribe(userName.encode('utf-8'))
 
-print("initializing creature handler")
-creatures = CreatureHandler(groupName, userName, connection)
-print("initialized creature handler")
 
 print("initializing chat handler")
 chat = chatHandler(groupName, userName, connection)
@@ -42,12 +39,12 @@ print("initialized roll handler")
 
 print("added handlers")
 handlers = {
-    "creatures" : creatures,
     "chat" : chat,
     "initiative" : initiative
 }
 
-main = window.main(socket.gethostname(), "D&D messaging", handlers)
+main = window.main(socket.gethostname(), "D&D messaging", handlers, connection)
+
 
 rolls.setMaster(main)
 
@@ -55,8 +52,6 @@ print("created window")
 
 connection.addEventType("message")
 connection.setEventHandler("message", main.handleMsg)
-
-connection.setRequestHandler("show creature", main.creaturesWindow.showCreature)
 
 connection.createTkinterRequestLoop("UI loop", main)
 connection.addRequestType("make roll")

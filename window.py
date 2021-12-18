@@ -1,3 +1,4 @@
+from pyzmqServer.client import Client
 from Creatures.CreaturesWindow import CreaturesWindow
 from Initiative.InitiativeWindow import InitiativeWindow
 import tkinter as tk
@@ -93,15 +94,15 @@ class textWindow(ttk.Frame):
 
 class main(tk.Tk):
 
-    def __init__(self, name, title, handlers, *args, **kwargs):
+    def __init__(self, name, title, handlers, connection: Client, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.wm_title(title)
 
         # self.videos = videosWindow(self, self, server, 2)
         self.text = textWindow(self, self, handlers)
-        self.creaturesWindow = CreaturesWindow(handlers["creatures"], self)
-        self.creaturesWindow.grid(column=2, row=0)
+        self.creatures = CreaturesWindow(self, connection)
+        self.creatures.grid(column = 2, row = 0)
 
         # self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
         # self.initiativeWindow.grid(column=2, row=1)

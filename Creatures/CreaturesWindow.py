@@ -1,5 +1,6 @@
 from uuid import UUID
 from DandData.creature import Creature
+from pyzmqServer.client import Client
 
 from Creatures.CreatureWindow import CreatureWindow
 from Creatures.creatureHandler import CreatureHandler
@@ -9,10 +10,10 @@ import dndApi
 
 class CreaturesWindow(ttk.Frame):
 
-    def __init__(self, creatureHandler: CreatureHandler, master = None, *args, **kwargs):
+    def __init__(self, master, connection: Client, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
-        self.creatureHandler = creatureHandler
+        self.creatureHandler = CreatureHandler(connection)
 
         self.creatureNoteBook = ttk.Notebook(master = self)
         self.creatureNoteBook.grid(column=0, row=0)
