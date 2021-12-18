@@ -14,6 +14,8 @@ class CreaturesWindow(ttk.Frame):
         super().__init__(master, *args, **kwargs)
 
         self.creatureHandler = CreatureHandler(connection)
+        connection.addRequestType('show creature')
+        connection.setRequestHandler('show creature', self.showCreature)
 
         self.creatureNoteBook = ttk.Notebook(master = self)
         self.creatureNoteBook.grid(column=0, row=0)
