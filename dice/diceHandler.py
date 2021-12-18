@@ -30,7 +30,7 @@ class DiceHandler(Handler):
 
             if len(result) == len(frames):
                 
-                data = (self.groupName, self.userName, creatureId, rollName, result)
+                data = (self.connection.groupName, self.connection.clientName, creatureId, rollName, result)
                 answer = self.connection.SendRequest("dice result", data)
 
                 if answer[0] == False:

@@ -11,10 +11,10 @@ from ServerHandler.Handler import Handler
 class CreatureHandler(Handler):
 
     def __init__(self, connection: Client) -> None:
-        super().__init__(connection.groupName, connection.clientName, connection)
+        super().__init__(connection)
 
     def addCreature(self, creatureType: str) -> None:
-        data = (self.groupName, self.userName, creatureType)
+        data = (self.connection.groupName, self.connection.clientName, creatureType)
         print("Adding creature", creatureType)
 
         answer = self.connection.SendRequest("add creature", data)
@@ -23,9 +23,9 @@ class CreatureHandler(Handler):
             print("could not create creature: '", answer[1], "'")
 
     def UseAction(self, creatureId: int, action: Action) -> None:
-        targets: list[tuple[str, UUID]] = [(self.userName, creatureId)] # target for now is self
+        targets: list[tuple[str, UUID]] = [(self.connection.clientName, creatureId)] # target for now is self
         
-        data = (self.groupName, self.userName, creatureId, action.name, targets)
+        data = (self.connection.groupName, self.connection.clientName, creatureId, action.name, targets)
         print("Using action", action.name)
 
         answer = self.connection.SendRequest("use action", data)

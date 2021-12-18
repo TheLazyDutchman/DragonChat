@@ -26,15 +26,15 @@ connection.Subscribe(userName.encode('utf-8'))
 
 
 print("initializing chat handler")
-chat = chatHandler(groupName, userName, connection)
+chat = chatHandler(connection)
 print("initialized chat handler")
 
 print("initializing initiative handler")
-initiative = InitiativeHandler(groupName, userName, connection)
+initiative = InitiativeHandler(connection)
 print("initialized initiative handler")
 
 print("initializing roll handler")
-rolls = DiceHandler(groupName, userName, connection)
+rolls = DiceHandler(connection)
 print("initialized roll handler")
 
 print("added handlers")
