@@ -1,5 +1,6 @@
 from pyzmqServer.client import Client
 from Creatures.CreaturesWindow import CreaturesWindow
+from DungeonMaster.dungeonMasterWindow import DungeonMasterWindow
 from Initiative.InitiativeWindow import InitiativeWindow
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -103,6 +104,8 @@ class main(tk.Tk):
         self.text = textWindow(self, self, handlers)
         self.creatures = CreaturesWindow(self, connection)
         self.creatures.grid(column = 2, row = 0)
+        self.dungeonMaster = DungeonMasterWindow(self, connection)
+        self.dungeonMaster.grid(column = 5, row = 0)
 
         # self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
         # self.initiativeWindow.grid(column=2, row=1)
