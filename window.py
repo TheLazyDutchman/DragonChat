@@ -107,6 +107,8 @@ class main(tk.Tk):
         self.dungeonMaster = DungeonMasterWindow(self, connection)
         self.dungeonMaster.grid(column = 5, row = 0)
 
+        connection.SendRequest("client ready", [])
+
         # self.initiativeWindow = InitiativeWindow(handlers["initiative"], self)
         # self.initiativeWindow.grid(column=2, row=1)
 
