@@ -10,9 +10,6 @@ from ServerHandler.Handler import Handler
 
 class CreatureHandler(Handler):
 
-    def __init__(self, connection: Client) -> None:
-        super().__init__(connection)
-
     def addCreature(self, creatureType: str) -> None:
         print("Adding creature", creatureType)
 

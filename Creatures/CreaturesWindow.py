@@ -21,6 +21,8 @@ class CreaturesWindow(ttk.Frame):
         connection.addRequestType('update health')
         connection.setRequestHandler('update health', self.updateHealth)
 
+        connection.addRequestType("next turn")
+        connection.setRequestHandler("next turn", self.startTurn)
 
 
         self.creatureNoteBook = ttk.Notebook(master = self)
@@ -81,3 +83,6 @@ class CreaturesWindow(ttk.Frame):
 
         self.creatureWindows[creatureId].creature.health = newHealth
         self.creatureWindows[creatureId].updateHealth()
+
+    def startTurn(self, event):
+        print(event)
