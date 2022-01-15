@@ -24,6 +24,9 @@ class CreaturesWindow(ttk.Frame):
         connection.addRequestType("next turn")
         connection.setRequestHandler("next turn", self.startTurn)
 
+        connection.addRequestType("end turn")
+        connection.setRequestHandler("end turn", self.endTurn)
+
 
         self.creatureNoteBook = ttk.Notebook(master = self)
         self.creatureNoteBook.grid(column=0, row=0)
@@ -90,3 +93,10 @@ class CreaturesWindow(ttk.Frame):
             pass
 
         self.creatureWindows[creatureId].startTurn()
+    
+    def endTurn(self, creatureId):
+        if not creatureId in self.creatureWindows:
+            print("creature not found")
+            pass
+
+        self.creatureWindows[creatureId].endTurn()
