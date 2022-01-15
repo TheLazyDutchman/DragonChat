@@ -21,6 +21,7 @@ class CreatureWindow(ttk.Frame):
 
         ttk.Label(master=self, text=creature.name).pack()
 
+        self.actionFrames: list[ActionWindow] = []
 
         self.dataNoteBook = ttk.Notebook(master = self)
         self.dataNoteBook.pack(fill = 'both', expand = True)
@@ -50,9 +51,18 @@ class CreatureWindow(ttk.Frame):
                 self.creatureHandler,
                 master = actionsWindow.scrollable_frame)
             actionFrame.pack()
+            self.actionFrames.append(actionFrame)
             actionsWindow.bind(actionFrame)
 
         self.dataNoteBook.add(actionsWindow, text="actions")
 
     def updateHealth(self) -> None:
         self.healthString.set(value = f"Health: {self.creature.health}/{self.creature.hitPoints}")
+
+    def startTurn(self):
+        for frame in self.actionFrames:
+            frame.unHideButton()
+
+    def endTurn(self):
+        for frame in self.actionFrames:
+            frame.hideButton()

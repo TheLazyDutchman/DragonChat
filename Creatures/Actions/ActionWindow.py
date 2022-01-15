@@ -37,10 +37,17 @@ class ActionWindow(ttk.Frame):
         # if type(self.action) == SaveAttack:
         #     showSaveAttackData(self, self.action)
 
-        ttk.Button(master = self, text = "Use", command = self.Use).pack()
+        self.useButton = ttk.Button(master = self, text = "Use", command = self.Use)
+        self.useButton.pack()
 
     def Use(self):
         self.creatureHandler.UseAction(self.creatureId, self.action)
+
+    def hideButton(self):
+        self.useButton.pack_forget()
+
+    def unHideButton(self):
+        self.useButton.pack()
 
 
 def showMultiAttackData(window: ActionWindow, data: MultiAttack) -> None:

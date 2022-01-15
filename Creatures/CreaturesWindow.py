@@ -84,5 +84,9 @@ class CreaturesWindow(ttk.Frame):
         self.creatureWindows[creatureId].creature.health = newHealth
         self.creatureWindows[creatureId].updateHealth()
 
-    def startTurn(self, event):
-        print(event)
+    def startTurn(self, creatureId):
+        if not creatureId in self.creatureWindows:
+            print("creature not found")
+            pass
+
+        self.creatureWindows[creatureId].startTurn()
