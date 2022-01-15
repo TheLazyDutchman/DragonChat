@@ -5,6 +5,7 @@ from ServerHandler.Handler import Handler
 
 
 
-class DiceHandler(Handler):
+class DungeonMasterHandler(Handler):
 
-    pass
+    def startCombat(self):
+        self.connection.SendRequest("start combat", [])

@@ -1,6 +1,7 @@
 import tkinter.ttk as ttk
 
 from pyzmqServer.client import Client
+from .dungeonMasterHandler import DungeonMasterHandler
 
 class DungeonMasterWindow(ttk.Frame):
     
@@ -11,6 +12,8 @@ class DungeonMasterWindow(ttk.Frame):
         self.connection.addRequestType("set dungeonMaster")
         self.connection.setRequestHandler("set dungeonMaster", self.start)
 
-    def start(self, event):
-        print(event)
-        print("started as dungeon master")
+    def start(self, _):
+        self.handler = DungeonMasterHandler(self.connection)
+
+        self.startCombatButton = ttk.Button(self, text = "Start Combat", command = self.handler.startCombat)
+        self.startCombatButton.pack()
