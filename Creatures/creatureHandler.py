@@ -28,3 +28,6 @@ class CreatureHandler(Handler):
 
         if answer[0] == False:
             print("could not use action: '", answer[1], "'")
+
+    def passTurn(self):
+        self.connection.SendRequest("pass turn", [])

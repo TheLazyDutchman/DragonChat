@@ -29,6 +29,8 @@ class CreatureWindow(ttk.Frame):
         self.showStats()
         self.showActions()
 
+        self.skipTurnButton = ttk.Button(self, text = "Pass turn", command = self.creatureHandler.passTurn)
+
     def showStats(self):
         statsWindow = ScrollableFrame(self.dataNoteBook)
         statsWindow.pack(fill = 'both', expand = True)
@@ -63,6 +65,10 @@ class CreatureWindow(ttk.Frame):
         for frame in self.actionFrames:
             frame.unHideButton()
 
+        self.skipTurnButton.pack()
+
     def endTurn(self):
         for frame in self.actionFrames:
             frame.hideButton()
+
+        self.skipTurnButton.pack_forget()
