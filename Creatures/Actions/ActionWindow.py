@@ -51,10 +51,13 @@ class ActionWindow(ttk.Frame):
 
 
 def showMultiAttackData(window: ActionWindow, data: MultiAttack) -> None:
+    ttk.Label(master = window, text = f"choose {data.amount} from:").pack()
     for option in data.options:
-        ttk.Label(master = window, text = "name: " + option.name).pack()
-        ttk.Label(master = window, text = "count: " + str(option.count)).pack()
-        ttk.Label(master = window, text = "type: " + option.actionType + "\n").pack()
+        ttk.Label(master = window, text = "option:").pack()
+        for attack in option:
+            ttk.Label(master = window, text = "name: " + attack.name).pack()
+            ttk.Label(master = window, text = "count: " + str(attack.count)).pack()
+            ttk.Label(master = window, text = "type: " + attack.actionType + "\n").pack()
 
 def showAttackData(window: ActionWindow, data: Attack) -> None:
     ttk.Label(master = window, 
